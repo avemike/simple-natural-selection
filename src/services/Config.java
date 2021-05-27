@@ -12,7 +12,8 @@ import java.util.Properties;
  */
 final public class Config {
     static public String configs_path = System.getProperty("user.dir") + "/configs";
-    static Properties terrain_properties = new Properties();
+    static public String[] properties_fnames = {"animals", "terrain"};
+    static Properties properties = new Properties();
 
     // Class is pseudo-static, there's no need to invoke constructor
     private Config() {
@@ -21,10 +22,9 @@ final public class Config {
     /**
      * Loads config from `fname` file into `properties`
      *
-     * @param fname      - properties fileName (with extension e.g. `terrain.properties)
-     * @param properties - variable which will store configs from specified file
+     * @param fname - properties fileName (with extension e.g. `terrain.properties)
      */
-    public static void load(String fname, Properties properties) {
+    public static void load(String fname) {
         FileInputStream is = null;
 
         try {
@@ -40,10 +40,19 @@ final public class Config {
         }
     }
 
-    public static Object terrain(String property) {
-        // @todo: error handling
-        if (terrain_properties.isEmpty()) load("terrain.properties", terrain_properties);
+    public static void load_all() {
+        for (String properties_fname : properties_fnames)
+            load(properties_fname + ".properties");
+    }
 
-        return terrain_properties.get(property);
+    public static String get(String property) throws Exception {
+        if (properties.isEmpty()) load_all();
+
+        final var value = properties.get(property);
+
+        if (value == null)
+            throw new Exception(String.format("Config: There is no %s property", property));
+
+        return value.toString();
     }
 }
