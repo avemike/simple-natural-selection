@@ -12,6 +12,7 @@ import java.util.Properties;
  */
 final public class Config {
     static public String configs_path = System.getProperty("user.dir") + "/configs";
+    static public String assets_path = System.getProperty("user.dir") + "/assets";
     static public String[] properties_fnames = {"animals", "terrain"};
     static Properties properties = new Properties();
 
@@ -40,13 +41,13 @@ final public class Config {
         }
     }
 
-    public static void load_all() {
+    public static void loadAll() {
         for (String properties_fname : properties_fnames)
             load(properties_fname + ".properties");
     }
 
     public static String get(String property) throws Exception {
-        if (properties.isEmpty()) load_all();
+        if (properties.isEmpty()) loadAll();
 
         final var value = properties.get(property);
 
