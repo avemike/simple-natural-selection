@@ -1,5 +1,8 @@
 package models;
 
+/**
+ * Represents a physical instance on a map
+ */
 public abstract class Representative extends Spatial {
     protected int width;
     protected int height;

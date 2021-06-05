@@ -1,5 +1,8 @@
 package models;
 
+/**
+ * Represents an instance with position on map
+ */
 public abstract class Spatial {
     protected int x;
     protected int y;

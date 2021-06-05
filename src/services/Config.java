@@ -46,13 +46,13 @@ final public class Config {
             load(properties_fname + ".properties");
     }
 
-    public static String get(String property) throws Exception {
+    public static String get(String property) {
         if (properties.isEmpty()) loadAll();
 
         final var value = properties.get(property);
 
-        if (value == null)
-            throw new Exception(String.format("Config: There is no %s property", property));
+        if (value == null) return "";
+        // @todo: elaborate on it - throw new Exception(String.format("Config: There is no %s property", property));
 
         return value.toString();
     }
