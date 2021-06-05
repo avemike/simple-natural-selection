@@ -29,7 +29,8 @@ class MyFrame extends JFrame {
 
             // 3. Display animals
             for (var animal : animals) {
-                animal.paint(g2D);
+                if (animal != null)
+                    animal.paint(g2D);
             }
         } catch (Exception e) {
             e.printStackTrace();

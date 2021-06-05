@@ -1,16 +1,17 @@
 package animals;
 
 import interfaces.Edible;
+import interfaces.Herbivore;
 import models.Animal;
 import services.Config;
 
 import java.awt.image.BufferedImage;
 
-public class Rabbit extends Animal implements Edible {
+public class Rabbit extends Animal implements Edible, Herbivore {
     protected static BufferedImage species_image = null;
 
-    protected Rabbit(final int x, final int y) throws Exception {
-        super(x, y, Config.assets_path + "/" + "rabbit.png");
+    protected Rabbit(final int x, final int y) {
+        super(x, y, Config.assets_path + "/" + "rabbit.png", Integer.parseInt(Config.get("rabbit_init_power")));
     }
 
     public static Rabbit create(final int x, final int y) {
