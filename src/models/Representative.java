@@ -1,6 +1,6 @@
 package models;
 
-abstract public class Representative extends Spatial {
+public abstract class Representative extends Spatial {
     protected int width;
     protected int height;
 

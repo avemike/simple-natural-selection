@@ -6,7 +6,7 @@ import services.Config;
 import java.awt.image.BufferedImage;
 
 public class Fox extends Animal {
-    static protected BufferedImage species_image = null;
+    protected static BufferedImage species_image = null;
 
     protected Fox(final int x, final int y) throws Exception {
         super(x, y, Config.assets_path + "/" + "fox.png");

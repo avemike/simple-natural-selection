@@ -1,6 +1,6 @@
 package models;
 
-public class Spatial {
+public abstract class Spatial {
     protected int x;
     protected int y;
 

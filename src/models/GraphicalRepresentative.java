@@ -6,11 +6,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class GraphicalRepresentation extends Representative {
+public abstract class GraphicalRepresentative extends Representative {
     protected static String path_to_image;
     protected BufferedImage representative_image;
 
-    public GraphicalRepresentation(final int x, final int y, final int width, final int height, final String path) {
+    public GraphicalRepresentative(final int x, final int y, final int width, final int height, final String path) {
         super(x, y, width, height);
 
         path_to_image = path;
