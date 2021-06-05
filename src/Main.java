@@ -1,4 +1,5 @@
 import animals.Fox;
+import animals.Rabbit;
 import models.Animal;
 
 import javax.swing.*;
@@ -18,10 +19,15 @@ class MyFrame extends JFrame {
 
         try {
             var animals = new Vector<Animal>();
-            for (var x = 0; x < 10; x++)
-                for (var y = 0; y < 10; y++)
-                    animals.add(Fox.create(x * x * 3, y * y * 3));
 
+            // 1. Add foxes
+            for (var x = 0; x < 10; x++)
+                animals.add(Fox.create(x * 64, x + 24));
+            // 2. Add rabbits
+            for (var x = 0; x < 50; x++)
+                animals.add(Rabbit.create(x * 32 % 500, 192 + 32 * (x * 32 / 500)));
+
+            // 3. Display animals
             for (var animal : animals) {
                 animal.paint(g2D);
             }
