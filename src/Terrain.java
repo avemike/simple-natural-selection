@@ -1,5 +1,3 @@
-package models;
-
 import services.Config;
 
 import java.io.File;
