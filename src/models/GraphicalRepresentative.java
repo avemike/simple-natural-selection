@@ -29,6 +29,6 @@ public abstract class GraphicalRepresentative extends Representative implements 
 
     @Override
     public void paint(Graphics graphics) {
-        graphics.drawImage(representative_image, x, y, width, height, null);
+        graphics.drawImage(representative_image, (int) x, (int) y, width, height, null);
     }
 }

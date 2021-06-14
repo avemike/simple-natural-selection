@@ -10,11 +10,11 @@ import java.util.Properties;
  *
  * @todo elaborate on keeping all properties within one `static Properties` variable
  */
-final public class Config {
-    static public String configs_path = System.getProperty("user.dir") + "/configs";
-    static public String assets_path = System.getProperty("user.dir") + "/assets";
-    static public String[] properties_fnames = {"animals", "terrain", "gui"};
-    private static Properties properties = new Properties();
+public final class Config {
+    private static final Properties properties = new Properties();
+    public static String configs_path = System.getProperty("user.dir") + "/configs";
+    public static String assets_path = System.getProperty("user.dir") + "/assets";
+    public static String[] properties_fnames = {"animals", "terrain", "gui", "simulation"};
 
     // Class is pseudo-static, there's no need to invoke constructor
     private Config() {

@@ -4,6 +4,7 @@ import animals.Fox;
 import animals.Rabbit;
 import models.Animal;
 import services.Config;
+import utils.FrameControler;
 
 import java.util.Vector;
 
@@ -19,16 +20,32 @@ public class Simulation {
         final var simulation = new Simulation();
 
         simulation.initializeAnimals();
-
-    }
-
-    public void render() {
-
-        ui.repaint();
+        simulation.initializeEventLoop();
     }
 
     private void initializeEventLoop() {
+        var condition = 100;
+        long iteration_start_time;
 
+        while (condition-- >= 0) {
+            // 0. set timer
+            iteration_start_time = System.currentTimeMillis();
+
+            // 1. run animals
+            for (var animal : animals) {
+                if (animal != null)
+                    animal.act();
+            }
+            // 2. "garbage collector"
+            // @todo: make "garbage collector" for animals
+
+            // 3. paint
+            ui.repaint();
+
+            // 4. delay
+            FrameControler.run(System.currentTimeMillis() - iteration_start_time);
+
+        }
     }
 
     private void initializeAnimals() {

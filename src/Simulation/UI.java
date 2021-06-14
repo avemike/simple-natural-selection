@@ -22,6 +22,7 @@ public class UI extends JFrame {
         var g2D = (Graphics2D) g;
 
         try {
+            if (animals == null) return;
             // 1. Draw all animals
             for (var animal : animals) {
                 if (animal != null)

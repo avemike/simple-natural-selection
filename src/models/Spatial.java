@@ -4,8 +4,8 @@ package models;
  * Represents an instance with position on map
  */
 public abstract class Spatial {
-    protected int x;
-    protected int y;
+    protected double x;
+    protected double y;
 
 
     // Constructor
@@ -14,11 +14,11 @@ public abstract class Spatial {
     }
 
     // Getters
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 

@@ -26,7 +26,7 @@ public abstract class Animal extends GraphicalRepresentative {
     }
 
     private boolean isRatioInNorm() {
-        return thirst >= Double.parseDouble(Config.get("animals_stable_thirst")) & hunger >= Double.parseDouble(Config.get("animals_stable_hunger"));
+        return thirst >= Double.parseDouble(Config.get("animals_stable_thirst")) && hunger >= Double.parseDouble(Config.get("animals_stable_hunger"));
     }
 
     protected void death() {
@@ -73,6 +73,9 @@ public abstract class Animal extends GraphicalRepresentative {
 
         // 2. check whether the goal is in interaction range
         final var goal_position = searchForGoal(goal);
+
+        // @todo: remove it
+        this.x += 0.5;
 
         // 3. check whether the goal is in sight
 
