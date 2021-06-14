@@ -1,37 +1,41 @@
 package models;
 
+import Simulation.Simulation;
 import services.Config;
+import utils.Position;
 
 
 /**
  * @apiNote 100 hunger means fulfilled, 0 hunger is starvation
+ * @apiNote Drain rates are calculated based on
  */
 public abstract class Animal extends GraphicalRepresentative {
-    public boolean isDead = false;
+    public boolean is_dead = false;
     protected double power;
     protected double health_points;
     // Needs (expressed as a percentage - default is 90%)
     protected double hunger = Double.parseDouble(Config.get("animals_initial_hunger"));
     protected double thirst = Double.parseDouble(Config.get("animals_initial_thirst"));
     protected double reproduction = Double.parseDouble(Config.get("animals_initial_reproduction"));
-    // Drain rate
-    protected double hunger_drain = Double.parseDouble(Config.get("animals_initial_hunger_drain"));
-    protected double thirst_drain = Double.parseDouble(Config.get("animals_initial_thirst_drain"));
-    protected double reproduction_drain = Double.parseDouble(Config.get("animals_initial_reproduction_drain"));
     // Danger level
     protected double hunger_danger = Double.parseDouble(Config.get("animals_danger_hunger"));
     protected double thirst_danger = Double.parseDouble(Config.get("animals_danger_thirst"));
 
-    public Animal(final int x, final int y, final String path, final int power) {
-        super(x, y, Integer.parseInt(Config.get("animals_pixel_width")), Integer.parseInt(Config.get("animals_pixel_height")), path);
+    public Animal(final Simulation simulation, final int x, final int y, final String path, final int power) {
+        super(simulation, x, y, Integer.parseInt(Config.get("animals_pixel_width")), Integer.parseInt(Config.get("animals_pixel_height")), path);
     }
 
     private boolean isRatioInNorm() {
         return thirst >= Double.parseDouble(Config.get("animals_stable_thirst")) & hunger >= Double.parseDouble(Config.get("animals_stable_hunger"));
     }
 
-    private void death() {
-        isDead = true;
+    protected void death() {
+        is_dead = true;
+    }
+
+    protected Position searchForGoal(final String goal) {
+        // todo: finish it
+        return new Position();
     }
 
     /**
@@ -54,10 +58,10 @@ public abstract class Animal extends GraphicalRepresentative {
     }
 
     /**
-     * @apiNote Method describing the behaviour of an individual in one iteration of the "event loop"
+     * Method describing the behaviour of an individual in one iteration of the "event loop"
      */
     public void act() {
-        if (isDead) return;
+        if (is_dead) return;
         // 0. check if predator is in sight
 
         // 1. check status of needs
@@ -65,9 +69,10 @@ public abstract class Animal extends GraphicalRepresentative {
             death();
             return;
         }
-        String goal = setMainGoal();
+        final var goal = setMainGoal();
 
         // 2. check whether the goal is in interaction range
+        final var goal_position = searchForGoal(goal);
 
         // 3. check whether the goal is in sight
 

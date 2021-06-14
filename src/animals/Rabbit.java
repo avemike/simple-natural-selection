@@ -1,5 +1,6 @@
 package animals;
 
+import Simulation.Simulation;
 import interfaces.Edible;
 import interfaces.Herbivore;
 import models.Animal;
@@ -10,13 +11,13 @@ import java.awt.image.BufferedImage;
 public class Rabbit extends Animal implements Edible, Herbivore {
     protected static BufferedImage species_image = null;
 
-    protected Rabbit(final int x, final int y) {
-        super(x, y, Config.assets_path + "/" + "rabbit.png", Integer.parseInt(Config.get("rabbit_init_power")));
+    protected Rabbit(final Simulation simulation, final int x, final int y) {
+        super(simulation, x, y, Config.assets_path + "/" + "rabbit.png", Integer.parseInt(Config.get("rabbit_init_power")));
     }
 
-    public static Rabbit create(final int x, final int y) {
+    public static Rabbit create(final Simulation simulation, final int x, final int y) {
         try {
-            final var rabbit = new Rabbit(x, y);
+            final var rabbit = new Rabbit(simulation, x, y);
 
             if (species_image == null)
                 species_image = rabbit.loadImage();

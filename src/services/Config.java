@@ -13,7 +13,7 @@ import java.util.Properties;
 final public class Config {
     static public String configs_path = System.getProperty("user.dir") + "/configs";
     static public String assets_path = System.getProperty("user.dir") + "/assets";
-    static public String[] properties_fnames = {"animals", "terrain"};
+    static public String[] properties_fnames = {"animals", "terrain", "gui"};
     private static Properties properties = new Properties();
 
     // Class is pseudo-static, there's no need to invoke constructor

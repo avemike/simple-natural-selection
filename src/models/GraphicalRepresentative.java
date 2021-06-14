@@ -1,17 +1,20 @@
 package models;
 
+import Simulation.Simulation;
+import interfaces.Paintable;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public abstract class GraphicalRepresentative extends Representative {
+public abstract class GraphicalRepresentative extends Representative implements Paintable {
     protected static String path_to_image;
     protected BufferedImage representative_image;
 
-    public GraphicalRepresentative(final int x, final int y, final int width, final int height, final String path) {
-        super(x, y, width, height);
+    public GraphicalRepresentative(final Simulation simulation, final int x, final int y, final int width, final int height, final String path) {
+        super(simulation, x, y, width, height);
 
         path_to_image = path;
     }
@@ -24,6 +27,7 @@ public abstract class GraphicalRepresentative extends Representative {
         representative_image = image;
     }
 
+    @Override
     public void paint(Graphics graphics) {
         graphics.drawImage(representative_image, x, y, width, height, null);
     }
