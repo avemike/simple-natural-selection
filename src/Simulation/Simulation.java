@@ -4,16 +4,18 @@ import animals.Fox;
 import animals.Rabbit;
 import models.Animal;
 import services.Config;
+import terrain.Terrain;
 import utils.FrameControler;
 
 import java.util.Vector;
 
 public class Simulation {
     private final UI ui;
+    private final Terrain terrain = new Terrain();
     private Vector<Animal> animals = new Vector<>();
 
     private Simulation() {
-        ui = new UI(animals);
+        ui = new UI(animals, terrain);
     }
 
     public static void start() {
@@ -37,7 +39,7 @@ public class Simulation {
                     animal.act();
             }
             // 2. "garbage collector"
-            // @todo: make "garbage collector" for animals
+            animals.removeIf(animal -> animal.is_dead);
 
             // 3. paint
             ui.repaint();
