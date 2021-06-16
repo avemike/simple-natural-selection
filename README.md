@@ -3,6 +3,14 @@
 > **⚠ Warning**
 > Project is currently under development
 
+### Coding conventions
+
+#### Naming
+
+- classes: UpperCamelCase
+- methods: lowerCamelCase
+- variables: snake_case
+
 ### Todo
 
 - [ ] 

@@ -10,7 +10,9 @@ public class Position {
     }
 
     public static boolean isInRange(final Position src, final Position obj, final double range) {
+        double horizontal_diff = Math.abs(src.x - obj.x);
+        double vertical_diff = Math.abs(src.y - obj.y);
 
-        return false;
+        return Math.sqrt(Math.pow(horizontal_diff, 2) + Math.pow(vertical_diff, 2)) <= range;
     }
 }

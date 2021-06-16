@@ -7,7 +7,7 @@ import utils.Position;
 
 /**
  * @apiNote 100 hunger means fulfilled, 0 hunger is starvation
- * @apiNote Drain rates are calculated based on
+ * @apiNote `Power` and `Drain rates` are calculated based on size
  */
 public abstract class Animal extends GraphicalRepresentative {
     public boolean is_dead = false;
@@ -67,7 +67,7 @@ public abstract class Animal extends GraphicalRepresentative {
         final Position nearby_predator = simulation.findNearbyPredator(coords, power, sight_range);
 
         if (nearby_predator != null) {
-            // @todo: write
+
         }
 
         // 1. check status of needs

@@ -30,13 +30,15 @@ public class Simulation {
 
     /**
      * @apiNote if there isn't nearby predator within range, return null
+     * @apiNote algorithm returns first animal that fullfills the condition
+     * @todo search for the nearest predator
      */
     public Position findNearbyPredator(final Position animal_pos, final double power, final double range) {
         for (var animal : animals) {
             // 0. check whether it is a threat
             if (animal.getPower() <= power) continue;
 
-            // 1. check if it within in range
+            // 1. check if it is within given range
             if (!Position.isInRange(animal_pos, animal.getPosition(), range)) continue;
 
             // 2. return position
