@@ -2,6 +2,7 @@ package models;
 
 import Simulation.Simulation;
 import services.Config;
+import utils.Needs;
 import utils.Position;
 
 
@@ -34,7 +35,7 @@ public abstract class Animal extends GraphicalRepresentative {
         is_dead = true;
     }
 
-    protected Position searchForGoal(final String goal) {
+    protected Position searchForGoal(final Needs goal) {
         // todo: finish it
         return new Position(0, 0);
     }
@@ -42,20 +43,20 @@ public abstract class Animal extends GraphicalRepresentative {
     /**
      * @apiNote Animals prioritize thirst and hunger over reproduction
      */
-    public String setMainGoal() {
+    public Needs setMainGoal() {
         // 1. checks whether the main coefficients are considered normal
-        if (isRatioInNorm()) return "reproduction";
+        if (isRatioInNorm()) return Needs.REPRODUCTION;
 
         // 2. check if in danger state of hunger/thirst
         if (thirst <= thirst_danger || hunger <= hunger_danger) {
-            if (thirst <= hunger) return "thirst";
-            return "hunger";
+            if (thirst <= hunger) return Needs.THIRST;
+            return Needs.HUNGER;
         }
 
         // 3. choose smaller coefficient
-        if (reproduction < hunger && reproduction < thirst) return "reproduction";
-        if (thirst <= hunger) return "thirst";
-        return "hunger";
+        if (reproduction < hunger && reproduction < thirst) return Needs.REPRODUCTION;
+        if (thirst <= hunger) return Needs.THIRST;
+        return Needs.HUNGER;
     }
 
     /**
@@ -63,21 +64,24 @@ public abstract class Animal extends GraphicalRepresentative {
      */
     public void act() {
         if (is_dead) return;
-        // 0. check if predator is in sight
+
+        // 0. check status of needs
+        if (hunger <= 0 || thirst <= 0) {
+            death();
+            return;
+        }
+
+        // 1. check if predator is in sight
         final Position nearby_predator = simulation.findNearbyPredator(coords, power, sight_range);
 
         if (nearby_predator != null) {
 
         }
 
-        // 1. check status of needs
-        if (hunger <= 0 || thirst <= 0) {
-            death();
-            return;
-        }
+        // 2. check whether the goal is in interaction range
+
         final var goal = setMainGoal();
 
-        // 2. check whether the goal is in interaction range
         final var goal_position = searchForGoal(goal);
 
         // @todo: remove it
