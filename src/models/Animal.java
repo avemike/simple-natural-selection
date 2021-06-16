@@ -13,6 +13,7 @@ public abstract class Animal extends GraphicalRepresentative {
     public boolean is_dead = false;
     protected double power;
     protected double health_points;
+    protected double sight_range = 100; // @todo: calc it
     // Needs (expressed as a percentage - default is 90%)
     protected double hunger = Double.parseDouble(Config.get("animals_initial_hunger"));
     protected double thirst = Double.parseDouble(Config.get("animals_initial_thirst"));
@@ -35,7 +36,7 @@ public abstract class Animal extends GraphicalRepresentative {
 
     protected Position searchForGoal(final String goal) {
         // todo: finish it
-        return new Position();
+        return new Position(0, 0);
     }
 
     /**
@@ -63,6 +64,11 @@ public abstract class Animal extends GraphicalRepresentative {
     public void act() {
         if (is_dead) return;
         // 0. check if predator is in sight
+        final Position nearby_predator = simulation.findNearbyPredator(coords, power, sight_range);
+
+        if (nearby_predator != null) {
+            // @todo: write
+        }
 
         // 1. check status of needs
         if (hunger <= 0 || thirst <= 0) {
@@ -75,13 +81,17 @@ public abstract class Animal extends GraphicalRepresentative {
         final var goal_position = searchForGoal(goal);
 
         // @todo: remove it
-        this.x += 0.5;
+        this.setX(this.getX() + 0.5);
 
         // 3. check whether the goal is in sight
 
         // 4. search for the goal
 
         // 5. needs drain
+    }
 
+    // Getters
+    public double getPower() {
+        return power;
     }
 }

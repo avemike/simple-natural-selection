@@ -15,6 +15,7 @@ public abstract class Representative extends Spatial {
         super(x, y);
 
         this.simulation = simulation;
+
         setDimensions(width, height);
     }
 
@@ -22,9 +23,9 @@ public abstract class Representative extends Spatial {
         super(0, 0);
 
         this.simulation = null;
+
         setDimensions(0, 0);
     }
-
 
     // Setters
     public void setDimensions(final int width, final int height) {

@@ -6,6 +6,7 @@ import models.Animal;
 import services.Config;
 import terrain.Terrain;
 import utils.FrameControler;
+import utils.Position;
 
 import java.util.Vector;
 
@@ -23,6 +24,26 @@ public class Simulation {
 
         simulation.initializeAnimals();
         simulation.initializeEventLoop();
+    }
+
+    // Interaction methods: animals - environment/other animals
+
+    /**
+     * @apiNote if there isn't nearby predator within range, return null
+     */
+    public Position findNearbyPredator(final Position animal_pos, final double power, final double range) {
+        for (var animal : animals) {
+            // 0. check whether it is a threat
+            if (animal.getPower() <= power) continue;
+
+            // 1. check if it within in range
+            if (!Position.isInRange(animal_pos, animal.getPosition(), range)) continue;
+
+            // 2. return position
+            return animal.getPosition();
+        }
+        // OPTIONAL: 3. otherwise return null
+        return null;
     }
 
     private void initializeEventLoop() {

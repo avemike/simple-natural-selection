@@ -1,30 +1,46 @@
 package models;
 
+import utils.Position;
+
 /**
  * Represents an instance with position on map
  */
 public abstract class Spatial {
-    protected double x;
-    protected double y;
-
+    protected Position coords;
 
     // Constructor
     Spatial(int x, int y) {
-        changeCoords(x, y);
+        coords = new Position(x, y);
+    }
+
+    Spatial(Position pos) {
+        coords = new Position(pos.x, pos.y);
     }
 
     // Getters
     public double getX() {
-        return x;
+        return coords.x;
+    }
+
+    public void setX(double x) {
+        coords.x = x;
     }
 
     public double getY() {
-        return y;
+        return coords.y;
+    }
+
+    public void setY(double y) {
+        coords.y = y;
+    }
+
+    public Position getPosition() {
+        return coords;
     }
 
     // Setters
     public void changeCoords(int x, int y) {
-        this.x = x;
-        this.y = y;
+        coords.x = x;
+        coords.y = y;
     }
 }
