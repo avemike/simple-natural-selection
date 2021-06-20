@@ -5,6 +5,8 @@ import services.Config;
 import utils.Needs;
 import utils.Position;
 
+import static utils.Position.getAngle;
+
 
 /**
  * @apiNote 100 hunger means fulfilled, 0 hunger is starvation
@@ -24,8 +26,14 @@ public abstract class Animal extends GraphicalRepresentative {
     protected double hunger_danger = Double.parseDouble(Config.get("animals_danger_hunger"));
     protected double thirst_danger = Double.parseDouble(Config.get("animals_danger_thirst"));
 
-    public Animal(final Simulation simulation, final int x, final int y, final String path, final int power) {
+    public Animal(final Simulation simulation, final int x, final int y, final String path, final double size) {
         super(simulation, x, y, Integer.parseInt(Config.get("animals_pixel_width")), Integer.parseInt(Config.get("animals_pixel_height")), path);
+
+        // @todo: calc it
+        this.size = size;
+        power = size;
+        speed = size * 0.01;
+        // @todo: temp
     }
 
     private boolean isRatioInNorm() {
@@ -39,6 +47,36 @@ public abstract class Animal extends GraphicalRepresentative {
     protected Position searchForGoal(final Needs goal) {
         // todo: finish it
         return new Position(0, 0);
+    }
+
+    protected Position calcNextStep(double angle) {
+        if (angle > 360) angle -= 360;
+        if (angle < 0) angle += 360;
+
+        final var horizontal_diff = Math.cos(angle) * speed;
+        final var vertical_diff = Math.sin(angle) * speed;
+
+        return new Position(coords.x + horizontal_diff, coords.y + vertical_diff);
+    }
+
+    protected void runTo(final Position goal) {
+        final var angle = getAngle(coords, goal);
+        final var angleDiffs = new int[]{0, 45, -45, 90, -90, 135, -135, 180};
+
+        Position next_pos = coords;
+
+        // 0. check from which angle it does not collide with anything
+        for (var angleDiff : angleDiffs) {
+            next_pos = calcNextStep(angle + angleDiff);
+
+            // 1. check if position collides
+            boolean isColliding = simulation.checkIfCollides(next_pos);
+
+            if (!isColliding) break;
+        }
+
+        // 2. move to position
+        coords = next_pos;
     }
 
     /**
@@ -75,12 +113,13 @@ public abstract class Animal extends GraphicalRepresentative {
         // 1. check if predator is in sight
         final Position nearby_predator = simulation.findNearbyPredator(coords, power, sight_range);
 
+        // OPTIONAL: run away
         if (nearby_predator != null) {
-
+            runTo(Position.oppositePosition(coords, nearby_predator));
+            return;
         }
 
         // 2. check whether the goal is in interaction range
-
         final var goal = setMainGoal();
 
         final var goal_position = searchForGoal(goal);
@@ -98,5 +137,9 @@ public abstract class Animal extends GraphicalRepresentative {
     // Getters
     public double getPower() {
         return power;
+    }
+
+    public double getSize() {
+        return size;
     }
 }
