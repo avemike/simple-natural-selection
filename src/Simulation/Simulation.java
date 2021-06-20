@@ -3,6 +3,9 @@ package Simulation;
 import animals.Fox;
 import animals.Rabbit;
 import models.Animal;
+import models.Plant;
+import plants.Shrub;
+import plants.Tree;
 import services.Config;
 import terrain.Terrain;
 import utils.FrameControler;
@@ -15,16 +18,19 @@ import static utils.Position.isInRange;
 public class Simulation {
     private final UI ui;
     private final Terrain terrain = new Terrain();
-    private Vector<Animal> animals = new Vector<>();
+    private final Vector<Animal> animals = new Vector<>();
+    private final Vector<Plant> plants = new Vector<>();
 
     private Simulation() {
-        ui = new UI(animals, terrain);
+        ui = new UI(animals, plants, terrain);
     }
 
     public static void start() {
         final var simulation = new Simulation();
 
         simulation.initializeAnimals();
+        simulation.initializePlants();
+
         simulation.initializeEventLoop();
     }
 
@@ -49,6 +55,22 @@ public class Simulation {
         // OPTIONAL: 3. otherwise return null
         return null;
     }
+
+    public Vector<Animal> searchForAnimals(final Position src, final double range) {
+        var found_animals = new Vector<Animal>();
+
+        for (var animal : animals) {
+            boolean isInRange = isInRange(src, animal.getPosition(), range);
+
+            if (isInRange) found_animals.add(animal);
+        }
+
+        return found_animals;
+    }
+
+    // @todo:
+    //  public Vector<Animal> searchForVegetation(final Position src, final double range) {
+    //  }
 
     public boolean checkIfCollides(final Position pos) {
         // 0. check collisions with instances
@@ -99,10 +121,19 @@ public class Simulation {
     private void initializeAnimals() {
         // 1. Add foxes
         for (var x = 0; x < Integer.parseInt(Config.get("animals_foxes_number")); x++)
-            animals.add(Fox.create(this, x * 64, x + 24));
+            animals.add(Fox.create(this, x * 64, 32));
         // 2. Add rabbits
         for (var x = 0; x < Integer.parseInt(Config.get("animals_rabbits_number")); x++)
             animals.add(Rabbit.create(this, x * 32 % 500, 192 + 32 * (x * 32 / 500)));
+    }
+
+    private void initializePlants() {
+        // 1. Add trees
+        for (var x = 0; x < Integer.parseInt(Config.get("plants_trees_number")); x++)
+            plants.add(Tree.create(this, x * 128, 80));
+        // 2. Add shrubs
+        for (var x = 0; x < Integer.parseInt(Config.get("plants_shrubs_number")); x++)
+            plants.add(Shrub.create(this, x * 32 % 500, 128 + 32 * (x * 32 / 500)));
     }
 
 }
