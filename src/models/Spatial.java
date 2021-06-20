@@ -2,8 +2,6 @@ package models;
 
 import utils.Position;
 
-import java.util.Vector;
-
 /**
  * Represents an instance with position on map
  */
@@ -40,19 +38,19 @@ public abstract class Spatial {
         return coords;
     }
 
-    protected Spatial getClosestInstance(final Vector<Spatial> objs) {
+    protected Spatial getClosestInstance(final Spatial[] objs) {
         int which_one = 0;
-        double closest_range = Position.getRange(coords, objs.get(0).getPosition());
+        double closest_range = Position.getRange(coords, objs[0].getPosition());
 
-        for (int i = 1, max = objs.size(); i < max; i++) {
-            final double current_range = Position.getRange(coords, objs.get(0).getPosition());
+        for (int i = 1, max = objs.length; i < max; i++) {
+            final double current_range = Position.getRange(coords, objs[0].getPosition());
             if (current_range < closest_range) {
                 which_one = i;
                 closest_range = current_range;
             }
         }
 
-        return objs.get(which_one);
+        return objs[which_one];
     }
 
     // Setters
