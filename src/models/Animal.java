@@ -5,6 +5,8 @@ import services.Config;
 import utils.Needs;
 import utils.Position;
 
+import java.util.Vector;
+
 import static utils.Position.getAngle;
 
 
@@ -14,6 +16,8 @@ import static utils.Position.getAngle;
  */
 public abstract class Animal extends GraphicalRepresentative {
     public boolean is_dead = false;
+    protected boolean isHerbivore;
+    protected boolean isMeateater;
     protected double power;
     protected double size;
     protected double speed;
@@ -45,7 +49,20 @@ public abstract class Animal extends GraphicalRepresentative {
     }
 
     protected Position searchForGoal(final Needs goal) {
-        // todo: finish it
+        Position goal_pos;
+        switch (goal) {
+            case HUNGER:
+                var goals = isHerbivore
+                        ? simulation.searchForPlants(coords, sight_range)
+                        : simulation.searchForAnimals(coords, sight_range);
+
+
+                runTo(getClosestInstance((Vector<Spatial>) goals).getPosition());
+            case THIRST:
+                // 0. search for water
+            case REPRODUCTION:
+                // 0. search for same specie with different sex
+        }
         return new Position(0, 0);
     }
 
@@ -123,9 +140,6 @@ public abstract class Animal extends GraphicalRepresentative {
         final var goal = setMainGoal();
 
         final var goal_position = searchForGoal(goal);
-
-        // @todo: remove it
-        this.setX(this.getX() + 0.5);
 
         // 3. check whether the goal is in sight
 

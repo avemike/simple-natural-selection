@@ -56,6 +56,18 @@ public class Simulation {
         return null;
     }
 
+    public Vector<Plant> searchForPlants(final Position src, final double range) {
+        var found_plants = new Vector<Plant>();
+
+        for (var plant : plants) {
+            boolean isInRange = isInRange(src, plant.getPosition(), range);
+
+            if (isInRange) found_plants.add(plant);
+        }
+
+        return found_plants;
+    }
+
     public Vector<Animal> searchForAnimals(final Position src, final double range) {
         var found_animals = new Vector<Animal>();
 

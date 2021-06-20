@@ -9,11 +9,15 @@ public class Position {
         this.y = y;
     }
 
-    public static boolean isInRange(final Position src, final Position obj, final double range) {
-        final var horizontal_diff = Math.abs(src.x - obj.x);
-        final var vertical_diff = Math.abs(src.y - obj.y);
+    public static double getRange(final Position a, final Position b) {
+        final var horizontal_diff = Math.abs(a.x - b.x);
+        final var vertical_diff = Math.abs(a.y - b.y);
 
-        return Math.sqrt(Math.pow(horizontal_diff, 2) + Math.pow(vertical_diff, 2)) <= range;
+        return Math.sqrt(Math.pow(horizontal_diff, 2) + Math.pow(vertical_diff, 2));
+    }
+
+    public static boolean isInRange(final Position src, final Position obj, final double range) {
+        return getRange(src, obj) <= range;
     }
 
     public static Position oppositePosition(final Position middle, final Position src) {
