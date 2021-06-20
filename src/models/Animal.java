@@ -13,8 +13,9 @@ import utils.Position;
 public abstract class Animal extends GraphicalRepresentative {
     public boolean is_dead = false;
     protected double power;
-    protected double health_points;
-    protected double sight_range = 100; // @todo: calc it
+    protected double size;
+    protected double speed;
+    protected double sight_range;
     // Needs (expressed as a percentage - default is 90%)
     protected double hunger = Double.parseDouble(Config.get("animals_initial_hunger"));
     protected double thirst = Double.parseDouble(Config.get("animals_initial_thirst"));

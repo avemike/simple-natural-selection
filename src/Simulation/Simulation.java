@@ -10,6 +10,8 @@ import utils.Position;
 
 import java.util.Vector;
 
+import static utils.Position.isInRange;
+
 public class Simulation {
     private final UI ui;
     private final Terrain terrain = new Terrain();
@@ -48,6 +50,27 @@ public class Simulation {
         return null;
     }
 
+    public boolean checkIfCollides(final Position pos) {
+        // 0. check collisions with instances
+        for (var animal : animals) {
+            boolean isColliding = isInRange(animal.getPosition(), pos, animal.getSize());
+
+            if (isColliding) return true;
+        }
+        // @todo: vegetation
+
+        // 1. check collision with borders
+        if (pos.x < 0 || pos.y < 0) return true;
+        if (pos.x > terrain.getWidth() || pos.y > terrain.getHeight()) return true;
+
+        // 2. check collision with water
+        if (terrain.isCollidingWithWater(pos)) return true;
+
+        // 3. otherwise return false
+        return false;
+
+    }
+
     private void initializeEventLoop() {
         var condition = 100;
         long iteration_start_time;
@@ -81,4 +104,5 @@ public class Simulation {
         for (var x = 0; x < Integer.parseInt(Config.get("animals_rabbits_number")); x++)
             animals.add(Rabbit.create(this, x * 32 % 500, 192 + 32 * (x * 32 / 500)));
     }
+
 }

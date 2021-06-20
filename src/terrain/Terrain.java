@@ -2,6 +2,7 @@ package terrain;
 
 import interfaces.Paintable;
 import services.Config;
+import utils.Position;
 
 import java.awt.*;
 import java.io.File;
@@ -10,20 +11,23 @@ import java.util.Scanner;
 
 public class Terrain implements Paintable {
     private final int field_size = Integer.parseInt(Config.get("terrain_field_size"));
-    private final int height = Integer.parseInt(Config.get("terrain_map_height"));
-    private final int width = Integer.parseInt(Config.get("terrain_map_width"));
+    private final int map_height = Integer.parseInt(Config.get("terrain_map_height"));
+    private final int map_width = Integer.parseInt(Config.get("terrain_map_width"));
+    private final double width = map_width * field_size;
+    private final double height = map_height * field_size;
+    private final char water_symbol = Config.get("water").charAt(0);
+    private final char ground_symbol = Config.get("ground").charAt(0);
+
     private char[][] board;
 
     public Terrain() {
-        board = new char[height][width];
+        board = new char[map_height][map_width];
+
         load();
     }
 
     @Override
     public void paint(Graphics graphics) {
-        final char water_symbol = Config.get("water").charAt(0);
-        final char ground_symbol = Config.get("ground").charAt(0);
-
         for (int row = 0; row < board.length; row++)
             for (int column = 0; column < board[row].length; column++) {
 
@@ -45,6 +49,13 @@ public class Terrain implements Paintable {
             }
     }
 
+    public boolean isCollidingWithWater(final Position pos) {
+        int field_x = ((int) pos.x) / field_size;
+        int field_y = ((int) pos.y) / field_size;
+
+        return board[field_y][field_x] == water_symbol;
+    }
+
     /**
      * Parse terrain map to `board` array from file specified in `terrain.properties` as `terrain_path`
      */
@@ -60,12 +71,12 @@ public class Terrain implements Paintable {
                 data.append(reader.nextLine());
             }
 
-            board = new char[height][width];
+            board = new char[map_height][map_width];
 
             String tmp_board = data.toString();
-            for (int row = 0; row < height; row++)
-                for (int col = 0; col < width; col++)
-                    board[row][col] = tmp_board.charAt(row * width + col);
+            for (int row = 0; row < map_height; row++)
+                for (int col = 0; col < map_width; col++)
+                    board[row][col] = tmp_board.charAt(row * map_width + col);
 
             reader.close();
         } catch (FileNotFoundException e) {
@@ -76,5 +87,13 @@ public class Terrain implements Paintable {
         }
     }
 
+    // Getters
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
 
 }
