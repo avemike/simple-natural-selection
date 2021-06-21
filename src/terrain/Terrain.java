@@ -56,6 +56,19 @@ public class Terrain implements Paintable {
         return board[field_y][field_x] == water_symbol;
     }
 
+
+    public Position searchForWater(final Position src, final double range) {
+        int field_x = ((int) src.x) / field_size;
+        int field_y = ((int) src.y) / field_size;
+        int field_range = (int) (range / field_size);
+
+        // from n to n+1 gives n+1
+        if (((double) field_range * field_size) < range) field_range++;
+
+        return new Position(0, 0);
+        // @todo: finish implementation
+    }
+
     /**
      * Parse terrain map to `board` array from file specified in `terrain.properties` as `terrain_path`
      */

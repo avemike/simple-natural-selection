@@ -5,6 +5,7 @@ import services.Config;
 
 public abstract class Plant extends GraphicalRepresentative {
     public boolean is_dead = false;
+    public boolean isEdible;
     protected double kcal = 0;
 
     public Plant(final Simulation simulation, final int x, final int y, final String path) {

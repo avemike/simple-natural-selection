@@ -74,10 +74,14 @@ public class Simulation {
         for (var animal : animals) {
             boolean isInRange = isInRange(src, animal.getPosition(), range);
 
-            if (isInRange) found_animals.add(animal);
+            if (isInRange && animal.getPosition() != src) found_animals.add(animal);
         }
 
         return found_animals;
+    }
+
+    public Position searchForWater(final Position src, final double range) throws Exception {
+        throw new Exception("Not implemented yet");
     }
 
     // @todo:

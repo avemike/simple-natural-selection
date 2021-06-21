@@ -5,8 +5,6 @@ import services.Config;
 import utils.Needs;
 import utils.Position;
 
-import java.util.Vector;
-
 import static utils.Position.getAngle;
 
 
@@ -16,12 +14,16 @@ import static utils.Position.getAngle;
  */
 public abstract class Animal extends GraphicalRepresentative {
     public boolean is_dead = false;
+    protected boolean sex;
     protected boolean isHerbivore;
     protected boolean isMeateater;
+    protected double temporary_random_direction;
+    protected int temporary_random_counter;
     protected double power;
     protected double size;
     protected double speed;
     protected double sight_range;
+    protected double interaction_range;
     // Needs (expressed as a percentage - default is 90%)
     protected double hunger = Double.parseDouble(Config.get("animals_initial_hunger"));
     protected double thirst = Double.parseDouble(Config.get("animals_initial_thirst"));
@@ -48,22 +50,39 @@ public abstract class Animal extends GraphicalRepresentative {
         is_dead = true;
     }
 
-    protected Position searchForGoal(final Needs goal) {
+    protected Position searchForGoal(final Needs goal, final double range) {
         Position goal_pos;
+        // @todo: not implemented yet
+        // 0. search for same specie with different sex
         switch (goal) {
-            case HUNGER:
-                var goals = isHerbivore
-                        ? simulation.searchForPlants(coords, sight_range)
-                        : simulation.searchForAnimals(coords, sight_range);
+            case HUNGER -> {
+                if (isHerbivore) {
+                    var goals = simulation.searchForPlants(coords, range);
+                    goals.removeIf(plant -> !plant.isEdible);
 
+                    return getClosestPlant(goals).getPosition();
+                }
+                if (isMeateater) {
+                    var goals = simulation.searchForAnimals(coords, range);
+                    goals.removeIf(animal -> animal.power >= power);
 
-                runTo(getClosestInstance((Vector<Spatial>) goals).getPosition());
-            case THIRST:
-                // 0. search for water
-            case REPRODUCTION:
-                // 0. search for same specie with different sex
+                    return getClosestAnimal(goals).getPosition();
+                }
+            }
+            case THIRST -> {
+                thirst = 100;
+                return null;
+            }
+            case REPRODUCTION -> {
+                final var animals = simulation.searchForAnimals(coords, range);
+                animals.removeIf(animal -> animal.sex == sex);
+
+                return getClosestAnimal(animals).getPosition();
+            }
         }
-        return new Position(0, 0);
+
+        // wont happen
+        return null;
     }
 
     protected Position calcNextStep(double angle) {
@@ -121,31 +140,61 @@ public abstract class Animal extends GraphicalRepresentative {
     public void act() {
         if (is_dead) return;
 
-        // 0. check status of needs
+        // 0. needs drain
+        // 1. check status of needs
         if (hunger <= 0 || thirst <= 0) {
             death();
+
+            clearRandomDirection();
             return;
         }
 
-        // 1. check if predator is in sight
+        // 2. check if predator is in sight
         final Position nearby_predator = simulation.findNearbyPredator(coords, power, sight_range);
 
         // OPTIONAL: run away
         if (nearby_predator != null) {
             runTo(Position.oppositePosition(coords, nearby_predator));
+
+            clearRandomDirection();
             return;
         }
 
-        // 2. check whether the goal is in interaction range
+        // 3. check whether the goal is in interaction range
         final var goal = setMainGoal();
 
-        final var goal_position = searchForGoal(goal);
+        var goal_position = searchForGoal(goal, interaction_range);
 
-        // 3. check whether the goal is in sight
+        if (goal_position != null) {
+            // 2. optional interact with the goal
 
-        // 4. search for the goal
+            clearRandomDirection();
+            return;
+        }
+        // 4. check whether the goal is in sight
 
-        // 5. needs drain
+        goal_position = searchForGoal(goal, sight_range);
+
+        if (goal_position != null) {
+            runTo(goal_position);
+
+            clearRandomDirection();
+            return;
+        }
+        // 5. search for the goal - move into random direction
+        if (temporary_random_counter > 0) temporary_random_counter--;
+        else setRandomDirection();
+
+        coords = calcNextStep(temporary_random_direction);
+    }
+
+    private void clearRandomDirection() {
+        temporary_random_counter = 0;
+    }
+
+    private void setRandomDirection() {
+        temporary_random_counter = 10;
+        temporary_random_direction = Math.random() * 360;
     }
 
     // Getters
