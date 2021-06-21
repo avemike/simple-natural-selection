@@ -11,7 +11,7 @@ public abstract class Spatial {
     protected Position coords;
 
     // Constructor
-    Spatial(int x, int y) {
+    Spatial(double x, double y) {
         coords = new Position(x, y);
     }
 
@@ -41,6 +41,8 @@ public abstract class Spatial {
     }
 
     protected Animal getClosestAnimal(final Vector<Animal> objs) {
+        if (objs.size() == 0) return null;
+
         int which_one = 0;
         double closest_range = Position.getRange(coords, objs.get(0).getPosition());
 
@@ -56,6 +58,8 @@ public abstract class Spatial {
     }
 
     protected Plant getClosestPlant(final Vector<Plant> objs) {
+        if (objs.size() == 0) return null;
+
         int which_one = 0;
         double closest_range = Position.getRange(coords, objs.get(0).getPosition());
 

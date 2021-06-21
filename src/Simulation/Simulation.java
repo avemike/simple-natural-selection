@@ -110,7 +110,7 @@ public class Simulation {
     }
 
     private void initializeEventLoop() {
-        var condition = 100;
+        var condition = 10000;
         long iteration_start_time;
 
         while (condition-- >= 0) {
@@ -134,22 +134,45 @@ public class Simulation {
         }
     }
 
+    private Position generateNonCollidingPos() {
+        Position random_position;
+        int max_counter = 40;
+        do {
+            random_position = new Position(Math.random() * terrain.getWidth(), Math.random() * terrain.getHeight());
+        } while (checkIfCollides(random_position) && max_counter-- > 0);
+
+        return random_position;
+    }
+
     private void initializeAnimals() {
         // 1. Add foxes
-        for (var x = 0; x < Integer.parseInt(Config.get("animals_foxes_number")); x++)
-            animals.add(Fox.create(this, x * 64, 32));
+        for (var x = 0; x < Integer.parseInt(Config.get("animals_foxes_number")); x++) {
+            var random_position = generateNonCollidingPos();
+
+            animals.add(Fox.create(this, random_position.x, random_position.y));
+        }
         // 2. Add rabbits
-        for (var x = 0; x < Integer.parseInt(Config.get("animals_rabbits_number")); x++)
-            animals.add(Rabbit.create(this, x * 32 % 500, 192 + 32 * (x * 32 / 500)));
+        for (var x = 0; x < Integer.parseInt(Config.get("animals_rabbits_number")); x++) {
+            var random_position = generateNonCollidingPos();
+
+            animals.add(Rabbit.create(this, random_position.x, random_position.y));
+        }
+
     }
 
     private void initializePlants() {
         // 1. Add trees
-        for (var x = 0; x < Integer.parseInt(Config.get("plants_trees_number")); x++)
-            plants.add(Tree.create(this, x * 128, 80));
+        for (var x = 0; x < Integer.parseInt(Config.get("plants_trees_number")); x++) {
+            var random_position = generateNonCollidingPos();
+
+            plants.add(Tree.create(this, random_position.x, random_position.y));
+        }
         // 2. Add shrubs
-        for (var x = 0; x < Integer.parseInt(Config.get("plants_shrubs_number")); x++)
-            plants.add(Shrub.create(this, x * 32 % 500, 128 + 32 * (x * 32 / 500)));
+        for (var x = 0; x < Integer.parseInt(Config.get("plants_shrubs_number")); x++) {
+            var random_position = generateNonCollidingPos();
+
+            plants.add(Shrub.create(this, random_position.x, random_position.y));
+        }
     }
 
 }

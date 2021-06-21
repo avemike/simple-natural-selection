@@ -11,7 +11,7 @@ public abstract class Representative extends Spatial {
     protected int height;
 
     // Constructors
-    Representative(final Simulation simulation, final int x, final int y, final int width, final int height) {
+    Representative(final Simulation simulation, final double x, final double y, final int width, final int height) {
         super(x, y);
 
         this.simulation = simulation;

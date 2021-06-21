@@ -9,11 +9,11 @@ import java.awt.image.BufferedImage;
 public class Tree extends Plant {
     protected static BufferedImage species_image = null;
 
-    protected Tree(final Simulation simulation, final int x, final int y) {
+    protected Tree(final Simulation simulation, final double x, final double y) {
         super(simulation, x, y, Config.assets_path + "/" + "tree.png");
     }
 
-    public static Tree create(final Simulation simulation, final int x, final int y) {
+    public static Tree create(final Simulation simulation, final double x, final double y) {
         try {
             final var tree = new Tree(simulation, x, y);
 

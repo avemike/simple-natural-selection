@@ -10,13 +10,13 @@ import java.awt.image.BufferedImage;
 public class Shrub extends Plant implements Edible {
     protected static BufferedImage species_image = null;
 
-    protected Shrub(final Simulation simulation, final int x, final int y) {
+    protected Shrub(final Simulation simulation, final double x, final double y) {
         super(simulation, x, y, Config.assets_path + "/" + "shrub.png");
 
         kcal = Double.parseDouble(Config.get("plants_shrub_kcal"));
     }
 
-    public static Shrub create(final Simulation simulation, final int x, final int y) {
+    public static Shrub create(final Simulation simulation, final double x, final double y) {
         try {
             final var shrub = new Shrub(simulation, x, y);
 

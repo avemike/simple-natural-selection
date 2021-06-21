@@ -32,7 +32,7 @@ public abstract class Animal extends GraphicalRepresentative {
     protected double hunger_danger = Double.parseDouble(Config.get("animals_danger_hunger"));
     protected double thirst_danger = Double.parseDouble(Config.get("animals_danger_thirst"));
 
-    public Animal(final Simulation simulation, final int x, final int y, final String path, final double size) {
+    public Animal(final Simulation simulation, final double x, final double y, final String path, final double size) {
         super(simulation, x, y, Integer.parseInt(Config.get("animals_pixel_width")), Integer.parseInt(Config.get("animals_pixel_height")), path);
 
         // @todo: calc it
@@ -60,13 +60,21 @@ public abstract class Animal extends GraphicalRepresentative {
                     var goals = simulation.searchForPlants(coords, range);
                     goals.removeIf(plant -> !plant.isEdible);
 
-                    return getClosestPlant(goals).getPosition();
+                    var closest_plant = getClosestPlant(goals);
+
+                    return closest_plant == null
+                            ? null
+                            : closest_plant.getPosition();
                 }
                 if (isMeateater) {
                     var goals = simulation.searchForAnimals(coords, range);
                     goals.removeIf(animal -> animal.power >= power);
 
-                    return getClosestAnimal(goals).getPosition();
+                    var closest_animal = getClosestAnimal(goals);
+
+                    return closest_animal == null
+                            ? null
+                            : closest_animal.getPosition();
                 }
             }
             case THIRST -> {
@@ -77,7 +85,11 @@ public abstract class Animal extends GraphicalRepresentative {
                 final var animals = simulation.searchForAnimals(coords, range);
                 animals.removeIf(animal -> animal.sex == sex);
 
-                return getClosestAnimal(animals).getPosition();
+                var closest_animal = getClosestAnimal(animals);
+
+                return closest_animal == null
+                        ? null
+                        : closest_animal.getPosition();
             }
         }
 

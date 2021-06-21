@@ -13,7 +13,7 @@ public abstract class GraphicalRepresentative extends Representative implements 
     protected static String path_to_image;
     protected BufferedImage representative_image;
 
-    public GraphicalRepresentative(final Simulation simulation, final int x, final int y, final int width, final int height, final String path) {
+    public GraphicalRepresentative(final Simulation simulation, final double x, final double y, final int width, final int height, final String path) {
         super(simulation, x, y, width, height);
 
         path_to_image = path;
