@@ -18,6 +18,7 @@ public class Rabbit extends Animal implements Edible, Herbivore {
         interaction_range = 30;
         sight_range = 100;
         sex = Math.random() * 2 > 1;
+        specie_name = "rabbit";
     }
 
     public static Rabbit create(final Simulation simulation, final double x, final double y) {

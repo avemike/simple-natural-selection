@@ -12,12 +12,13 @@ public class Fox extends Animal implements Edible, MeatEater {
     protected static BufferedImage species_image = null;
 
     protected Fox(final Simulation simulation, final double x, final double y) {
-        super(simulation, x, y, Config.assets_path + "/" + "fox.png", Integer.parseInt(Config.get("fox_init_power")));
+        super(simulation, x, y, Config.assets_path + "/" + "fox.png", Integer.parseInt(Config.get("fox_init_size")));
 
         speed = 3;
         interaction_range = 60;
         sight_range = 120;
         sex = Math.random() * 2 > 1;
+        specie_name = "fox";
     }
 
     public static Fox create(final Simulation simulation, final double x, final double y) {

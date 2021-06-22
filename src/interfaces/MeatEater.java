@@ -1,6 +1,6 @@
 package interfaces;
 
 public interface MeatEater {
-    boolean isMeatEater = true;
-    boolean isHerbivore = false;
+    boolean is_meat_eater = true;
+    boolean is_herbivore = false;
 }

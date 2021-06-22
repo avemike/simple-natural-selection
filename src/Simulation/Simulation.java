@@ -146,13 +146,13 @@ public class Simulation {
 
     private void initializeAnimals() {
         // 1. Add foxes
-        for (var x = 0; x < Integer.parseInt(Config.get("animals_foxes_number")); x++) {
+        for (int x = 0, max = Integer.parseInt(Config.get("animals_foxes_number")); x < max; x++) {
             var random_position = generateNonCollidingPos();
 
             animals.add(Fox.create(this, random_position.x, random_position.y));
         }
         // 2. Add rabbits
-        for (var x = 0; x < Integer.parseInt(Config.get("animals_rabbits_number")); x++) {
+        for (int x = 0, max = Integer.parseInt(Config.get("animals_rabbits_number")); x < max; x++) {
             var random_position = generateNonCollidingPos();
 
             animals.add(Rabbit.create(this, random_position.x, random_position.y));
@@ -162,13 +162,13 @@ public class Simulation {
 
     private void initializePlants() {
         // 1. Add trees
-        for (var x = 0; x < Integer.parseInt(Config.get("plants_trees_number")); x++) {
+        for (int x = 0, max = Integer.parseInt(Config.get("plants_trees_number")); x < max; x++) {
             var random_position = generateNonCollidingPos();
 
             plants.add(Tree.create(this, random_position.x, random_position.y));
         }
         // 2. Add shrubs
-        for (var x = 0; x < Integer.parseInt(Config.get("plants_shrubs_number")); x++) {
+        for (int x = 0, max = Integer.parseInt(Config.get("plants_shrubs_number")); x < max; x++) {
             var random_position = generateNonCollidingPos();
 
             plants.add(Shrub.create(this, random_position.x, random_position.y));

@@ -50,8 +50,11 @@ public class Terrain implements Paintable {
     }
 
     public boolean isCollidingWithWater(final Position pos) {
+//        System.out.println(pos.x + " " + pos.y);
         int field_x = ((int) pos.x) / field_size;
         int field_y = ((int) pos.y) / field_size;
+//        System.out.println("field_x " + field_x);
+//        System.out.println("field_y " + field_y);
 
         return board[field_y][field_x] == water_symbol;
     }

@@ -15,10 +15,11 @@ import static utils.Position.getAngle;
 public abstract class Animal extends GraphicalRepresentative {
     public boolean is_dead = false;
     protected boolean sex;
-    protected boolean isHerbivore;
-    protected boolean isMeateater;
-    protected double temporary_random_direction;
-    protected int temporary_random_counter;
+    protected boolean is_herbivore;
+    protected boolean is_meat_eater;
+    protected String specie_name;
+    protected double temporary_random_direction = 0;
+    protected int temporary_random_counter = 0;
     protected double power;
     protected double size;
     protected double speed;
@@ -56,7 +57,7 @@ public abstract class Animal extends GraphicalRepresentative {
         // 0. search for same specie with different sex
         switch (goal) {
             case HUNGER -> {
-                if (isHerbivore) {
+                if (is_herbivore) {
                     var goals = simulation.searchForPlants(coords, range);
                     goals.removeIf(plant -> !plant.isEdible);
 
@@ -66,7 +67,7 @@ public abstract class Animal extends GraphicalRepresentative {
                             ? null
                             : closest_plant.getPosition();
                 }
-                if (isMeateater) {
+                if (is_meat_eater) {
                     var goals = simulation.searchForAnimals(coords, range);
                     goals.removeIf(animal -> animal.power >= power);
 
@@ -83,7 +84,7 @@ public abstract class Animal extends GraphicalRepresentative {
             }
             case REPRODUCTION -> {
                 final var animals = simulation.searchForAnimals(coords, range);
-                animals.removeIf(animal -> animal.sex == sex);
+                animals.removeIf(animal -> animal.sex == sex || !animal.specie_name.equals(specie_name));
 
                 var closest_animal = getClosestAnimal(animals);
 
@@ -107,9 +108,9 @@ public abstract class Animal extends GraphicalRepresentative {
         return new Position(coords.x + horizontal_diff, coords.y + vertical_diff);
     }
 
-    protected void runTo(final Position goal) {
-        final var angle = getAngle(coords, goal);
-        final var angleDiffs = new int[]{0, 45, -45, 90, -90, 135, -135, 180};
+    protected void runTo(final Position goal, double angle) {
+        if (goal != null) angle = getAngle(coords, goal);
+        final var angleDiffs = new int[]{0, 45, -45, 90, -90, 135, -135, 180, 225, -225, 270, -270};
 
         Position next_pos = coords;
 
@@ -125,6 +126,14 @@ public abstract class Animal extends GraphicalRepresentative {
 
         // 2. move to position
         coords = next_pos;
+    }
+
+    protected void runToPosition(final Position goal) {
+        runTo(goal, 0);
+    }
+
+    protected void runInDirection(final double angle) {
+        runTo(null, angle);
     }
 
     /**
@@ -166,7 +175,7 @@ public abstract class Animal extends GraphicalRepresentative {
 
         // OPTIONAL: run away
         if (nearby_predator != null) {
-            runTo(Position.oppositePosition(coords, nearby_predator));
+            runToPosition(Position.oppositePosition(coords, nearby_predator));
 
             clearRandomDirection();
             return;
@@ -183,12 +192,12 @@ public abstract class Animal extends GraphicalRepresentative {
             clearRandomDirection();
             return;
         }
-        // 4. check whether the goal is in sight
 
+        // 4. check whether the goal is in sight
         goal_position = searchForGoal(goal, sight_range);
 
         if (goal_position != null) {
-            runTo(goal_position);
+            runToPosition(goal_position);
 
             clearRandomDirection();
             return;
@@ -197,7 +206,7 @@ public abstract class Animal extends GraphicalRepresentative {
         if (temporary_random_counter > 0) temporary_random_counter--;
         else setRandomDirection();
 
-        coords = calcNextStep(temporary_random_direction);
+        runInDirection(temporary_random_direction);
     }
 
     private void clearRandomDirection() {
