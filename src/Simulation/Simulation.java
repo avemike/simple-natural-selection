@@ -88,9 +88,10 @@ public class Simulation {
     //  public Vector<Animal> searchForVegetation(final Position src, final double range) {
     //  }
 
-    public boolean checkIfCollides(final Position pos) {
+    public boolean checkIfCollides(final Position pos, final Animal current_animal) {
         // 0. check collisions with instances
         for (var animal : animals) {
+            if (animal == current_animal) continue;
             boolean isColliding = isInRange(animal.getPosition(), pos, animal.getSize());
 
             if (isColliding) return true;
@@ -139,7 +140,7 @@ public class Simulation {
         int max_counter = 40;
         do {
             random_position = new Position(Math.random() * terrain.getWidth(), Math.random() * terrain.getHeight());
-        } while (checkIfCollides(random_position) && max_counter-- > 0);
+        } while (checkIfCollides(random_position, null) && max_counter-- > 0);
 
         return random_position;
     }
@@ -149,13 +150,13 @@ public class Simulation {
         for (int x = 0, max = Integer.parseInt(Config.get("animals_foxes_number")); x < max; x++) {
             var random_position = generateNonCollidingPos();
 
-            animals.add(Fox.create(this, random_position.x, random_position.y));
+            animals.add(Fox.create(this, random_position.x, random_position.y, Double.parseDouble(Config.get("fox_init_size"))));
         }
         // 2. Add rabbits
         for (int x = 0, max = Integer.parseInt(Config.get("animals_rabbits_number")); x < max; x++) {
             var random_position = generateNonCollidingPos();
 
-            animals.add(Rabbit.create(this, random_position.x, random_position.y));
+            animals.add(Rabbit.create(this, random_position.x, random_position.y, Double.parseDouble(Config.get("rabbit_init_size"))));
         }
 
     }

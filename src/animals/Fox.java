@@ -11,19 +11,21 @@ import java.awt.image.BufferedImage;
 public class Fox extends Animal implements Edible, MeatEater {
     protected static BufferedImage species_image = null;
 
-    protected Fox(final Simulation simulation, final double x, final double y) {
-        super(simulation, x, y, Config.assets_path + "/" + "fox.png", Integer.parseInt(Config.get("fox_init_size")));
+    protected Fox(final Simulation simulation, final double x, final double y, final double size) {
+        super(simulation, x, y, Config.assets_path + "/" + "fox.png", size);
 
-        speed = 3;
-        interaction_range = 60;
-        sight_range = 120;
+        final double specie_ratio = size / Double.parseDouble(Config.get("fox_init_size"));
+
+        speed = specie_ratio * Double.parseDouble(Config.get("fox_init_speed"));
+        interaction_range = 16 + size;
+        sight_range = 1.25 * specie_ratio * Double.parseDouble(Config.get("fox_init_sight_range"));
         sex = Math.random() * 2 > 1;
         specie_name = "fox";
     }
 
-    public static Fox create(final Simulation simulation, final double x, final double y) {
+    public static Fox create(final Simulation simulation, final double x, final double y, final double size) {
         try {
-            final var fox = new Fox(simulation, x, y);
+            final var fox = new Fox(simulation, x, y, size);
 
             if (species_image == null)
                 species_image = fox.loadImage();

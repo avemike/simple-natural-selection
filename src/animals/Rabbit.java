@@ -11,19 +11,21 @@ import java.awt.image.BufferedImage;
 public class Rabbit extends Animal implements Edible, Herbivore {
     protected static BufferedImage species_image = null;
 
-    protected Rabbit(final Simulation simulation, final double x, final double y) {
-        super(simulation, x, y, Config.assets_path + "/" + "rabbit.png", Integer.parseInt(Config.get("rabbit_init_power")));
+    protected Rabbit(final Simulation simulation, final double x, final double y, final double size) {
+        super(simulation, x, y, Config.assets_path + "/" + "rabbit.png", Integer.parseInt(Config.get("rabbit_init_size")));
 
-        speed = 2.4;
-        interaction_range = 30;
-        sight_range = 100;
+        final double specie_ratio = size / Double.parseDouble(Config.get("rabbit_init_size"));
+
+        speed = specie_ratio * Double.parseDouble(Config.get("rabbit_init_speed"));
+        interaction_range = 16 + size;
+        sight_range = 1.2 * specie_ratio * Double.parseDouble(Config.get("rabbit_init_sight_range"));
         sex = Math.random() * 2 > 1;
         specie_name = "rabbit";
     }
 
-    public static Rabbit create(final Simulation simulation, final double x, final double y) {
+    public static Rabbit create(final Simulation simulation, final double x, final double y, final double size) {
         try {
-            final var rabbit = new Rabbit(simulation, x, y);
+            final var rabbit = new Rabbit(simulation, x, y, size);
 
             if (species_image == null)
                 species_image = rabbit.loadImage();

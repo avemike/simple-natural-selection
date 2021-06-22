@@ -24,7 +24,7 @@ public class Position {
         final var horizontal_diff = middle.x - src.x;
         final var vertical_diff = middle.y - src.y;
 
-        return new Position(middle.x - horizontal_diff, middle.y - vertical_diff);
+        return new Position(middle.x + horizontal_diff, middle.y + vertical_diff);
     }
 
     /**

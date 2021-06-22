@@ -36,10 +36,8 @@ public abstract class Animal extends GraphicalRepresentative {
     public Animal(final Simulation simulation, final double x, final double y, final String path, final double size) {
         super(simulation, x, y, Integer.parseInt(Config.get("animals_pixel_width")), Integer.parseInt(Config.get("animals_pixel_height")), path);
 
-        // @todo: calc it
         this.size = size;
         power = size;
-        speed = size * 0.01;
         // @todo: temp
     }
 
@@ -113,18 +111,21 @@ public abstract class Animal extends GraphicalRepresentative {
         final var angleDiffs = new int[]{0, 45, -45, 90, -90, 135, -135, 180, 225, -225, 270, -270};
 
         Position next_pos = coords;
+        boolean isColliding = false;
 
         // 0. check from which angle it does not collide with anything
         for (var angleDiff : angleDiffs) {
             next_pos = calcNextStep(angle + angleDiff);
 
             // 1. check if position collides
-            boolean isColliding = simulation.checkIfCollides(next_pos);
+            isColliding = simulation.checkIfCollides(next_pos, this);
 
             if (!isColliding) break;
         }
+        // 2. if everywhere were collision, get stuck
+        if (isColliding) return;
 
-        // 2. move to position
+        // 3. move to position
         coords = next_pos;
     }
 
