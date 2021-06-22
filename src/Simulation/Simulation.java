@@ -8,18 +8,22 @@ import plants.Shrub;
 import plants.Tree;
 import services.Config;
 import terrain.Terrain;
-import utils.FrameControler;
 import utils.Position;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import static utils.Position.isInRange;
 
-public class Simulation {
+public class Simulation implements ActionListener {
     private final UI ui;
     private final Terrain terrain = new Terrain();
     private final Vector<Animal> animals = new Vector<>();
     private final Vector<Plant> plants = new Vector<>();
+
+    private int event_loop_condition = 100000;
 
     private Simulation() {
         ui = new UI(animals, plants, terrain);
@@ -34,6 +38,13 @@ public class Simulation {
         simulation.initializeEventLoop();
     }
 
+    private void changeLoopCondition() {
+        event_loop_condition--;
+    }
+
+    private boolean hasLoopEnded() {
+        return event_loop_condition <= 0;
+    }
     // Interaction methods: animals - environment/other animals
 
     /**
@@ -110,29 +121,28 @@ public class Simulation {
 
     }
 
-    private void initializeEventLoop() {
-        var condition = 10000;
-        long iteration_start_time;
+    private void loopStep() {
+        if (hasLoopEnded()) return;
 
-        while (condition-- >= 0) {
-            // 0. set timer
-            iteration_start_time = System.currentTimeMillis();
-
-            // 1. run animals
-            for (var animal : animals) {
-                if (animal != null)
-                    animal.act();
-            }
-            // 2. "garbage collector"
-            animals.removeIf(animal -> animal.is_dead);
-
-            // 3. paint
-            ui.repaint();
-
-            // 4. delay
-            FrameControler.run(System.currentTimeMillis() - iteration_start_time);
-
+        // 1. run animals
+        for (var animal : animals) {
+            if (animal != null)
+                animal.act();
         }
+        // 2. "garbage collector"
+        animals.removeIf(animal -> animal.is_dead);
+
+        // 3. paint
+        ui.repaint();
+
+        // 4. change iteration condition
+        changeLoopCondition();
+    }
+
+    private void initializeEventLoop() {
+        final var timer = new Timer(1000 / Integer.parseInt(Config.get("simulation_iterations_per_second")), this);
+
+        timer.start();
     }
 
     private Position generateNonCollidingPos() {
@@ -176,4 +186,8 @@ public class Simulation {
         }
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        loopStep();
+    }
 }
