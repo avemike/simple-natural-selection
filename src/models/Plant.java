@@ -9,7 +9,7 @@ public abstract class Plant extends GraphicalRepresentative {
     protected double kcal = 0;
 
     public Plant(final Simulation simulation, final double x, final double y, final String path, final String specie_name) {
-        super(simulation, x, y, Integer.parseInt(Config.get("plants_pixel_width")), Integer.parseInt(Config.get("plants_pixel_height")), path, specie_name);
+        super(simulation, x, y, Integer.parseInt(Config.get("plants_pixel_size")), path, specie_name);
     }
 
     protected void death() {

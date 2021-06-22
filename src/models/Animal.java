@@ -24,6 +24,7 @@ public abstract class Animal extends GraphicalRepresentative {
     protected double speed;
     protected double sight_range;
     protected double interaction_range;
+    protected double kcal;
     // Needs (expressed as a percentage - default is 90%)
     protected double hunger = Double.parseDouble(Config.get("animals_initial_hunger"));
     protected double thirst = Double.parseDouble(Config.get("animals_initial_thirst"));
@@ -33,9 +34,10 @@ public abstract class Animal extends GraphicalRepresentative {
     protected double thirst_danger = Double.parseDouble(Config.get("animals_danger_thirst"));
 
     public Animal(final Simulation simulation, final double x, final double y, final String path, final double size, final String specie_name) {
-        super(simulation, x, y, Integer.parseInt(Config.get("animals_pixel_width")), Integer.parseInt(Config.get("animals_pixel_height")), path, specie_name);
+        super(simulation, x, y, (int) size, path, specie_name);
 
         this.size = size;
+        kcal = Double.parseDouble(Config.get(specie_name + "_init_kcal"));
         power = size;
         interaction_range = 16 + size;
     }
@@ -162,6 +164,7 @@ public abstract class Animal extends GraphicalRepresentative {
         if (is_dead) return;
 
         // 0. needs drain
+        // @todo: implement needs drain
         // 1. check status of needs
         if (hunger <= 0 || thirst <= 0) {
             death();
@@ -184,17 +187,11 @@ public abstract class Animal extends GraphicalRepresentative {
         // 3. check whether the goal is in interaction range
         final var goal = setMainGoal();
 
-        var goal_position = searchForGoal(goal, interaction_range);
+        boolean doesInteracted = searchForGoalAndInteract(goal);
 
-        if (goal_position != null) {
-            // 2. optional interact with the goal
-
-            clearRandomDirection();
-            return;
-        }
 
         // 4. check whether the goal is in sight
-        goal_position = searchForGoal(goal, sight_range);
+        var goal_position = searchForGoal(goal, sight_range);
 
         if (goal_position != null) {
             runToPosition(goal_position);
@@ -207,6 +204,65 @@ public abstract class Animal extends GraphicalRepresentative {
         else setRandomDirection();
 
         runInDirection(temporary_random_direction);
+    }
+
+    protected void eatPlant(final Plant plant) {
+        hunger += plant.kcal;
+        plant.death();
+    }
+
+    protected void eatAnimal(final Animal animal) {
+        hunger += animal.kcal / 3;
+        animal.death();
+    }
+
+    protected boolean searchForGoalAndInteract(Needs goal) {
+        switch (goal) {
+            case HUNGER -> {
+                if (is_herbivore) {
+                    var goals = simulation.searchForPlants(coords, interaction_range);
+                    goals.removeIf(plant -> !plant.isEdible);
+
+                    var closest_plant = getClosestPlant(goals);
+
+                    if (closest_plant != null)
+                        eatPlant(closest_plant);
+
+                    return closest_plant != null;
+                }
+                if (is_meat_eater) {
+                    var goals = simulation.searchForAnimals(coords, interaction_range);
+                    goals.removeIf(animal -> animal.power >= power);
+
+                    var closest_animal = getClosestAnimal(goals);
+
+                    if (closest_animal != null)
+                        eatAnimal(closest_animal);
+
+                    return closest_animal != null;
+                }
+            }
+            case THIRST -> {
+                // @todo: implement
+                thirst = 100;
+                return true;
+            }
+            case REPRODUCTION -> {
+                final var animals = simulation.searchForAnimals(coords, interaction_range);
+                animals.removeIf(animal -> animal.sex == sex || !animal.specie_name.equals(specie_name));
+
+                var closest_animal = getClosestAnimal(animals);
+
+                if (closest_animal != null) {
+                    // @todo: expand reproduce logic
+
+
+                }
+
+                return closest_animal != null;
+            }
+        }
+        return false;
     }
 
     private void clearRandomDirection() {

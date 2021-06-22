@@ -17,6 +17,7 @@ public class Fox extends Animal implements Edible, MeatEater {
         final double specie_ratio = size / Double.parseDouble(Config.get("fox_init_size"));
 
         speed = specie_ratio * Double.parseDouble(Config.get("fox_init_speed"));
+        kcal *= specie_ratio;
         interaction_range = 16 + size;
         sight_range = 1.25 * specie_ratio * Double.parseDouble(Config.get("fox_init_sight_range"));
         sex = Math.random() * 2 > 1;

@@ -162,13 +162,15 @@ public class Simulation implements ActionListener {
         for (int x = 0, max = Integer.parseInt(Config.get("animals_foxes_number")); x < max; x++) {
             var random_position = generateNonCollidingPos();
 
-            animals.add(Fox.create(this, random_position.x, random_position.y, Double.parseDouble(Config.get("fox_init_size"))));
+            double randomness_factor = 0.85 + Math.random() * 0.3;
+            animals.add(Fox.create(this, random_position.x, random_position.y, randomness_factor * Double.parseDouble(Config.get("fox_init_size"))));
         }
         // 2. Add rabbits
         for (int x = 0, max = Integer.parseInt(Config.get("animals_rabbits_number")); x < max; x++) {
             var random_position = generateNonCollidingPos();
 
-            animals.add(Rabbit.create(this, random_position.x, random_position.y, Double.parseDouble(Config.get("rabbit_init_size"))));
+            double randomness_factor = 0.85 + Math.random() * 0.3;
+            animals.add(Rabbit.create(this, random_position.x, random_position.y, randomness_factor * Double.parseDouble(Config.get("rabbit_init_size"))));
         }
 
     }
