@@ -1,6 +1,7 @@
 package models;
 
 import Simulation.Simulation;
+import org.jetbrains.annotations.NotNull;
 import services.Config;
 import utils.Needs;
 import utils.Position;
@@ -97,16 +98,6 @@ public abstract class Animal extends GraphicalRepresentative {
         return null;
     }
 
-    protected Position calcNextStep(double angle) {
-        if (angle > 360) angle -= 360;
-        if (angle < 0) angle += 360;
-
-        final var horizontal_diff = Math.cos(angle) * speed;
-        final var vertical_diff = Math.sin(angle) * speed;
-
-        return new Position(coords.x + horizontal_diff, coords.y + vertical_diff);
-    }
-
     protected void runTo(final Position goal, double angle) {
         if (goal != null) angle = getAngle(coords, goal);
         final var angleDiffs = new int[]{0, 45, -45, 90, -90, 135, -135, 180, 225, -225, 270, -270};
@@ -116,7 +107,7 @@ public abstract class Animal extends GraphicalRepresentative {
 
         // 0. check from which angle it does not collide with anything
         for (var angleDiff : angleDiffs) {
-            next_pos = calcNextStep(angle + angleDiff);
+            next_pos = calcNextStep(angle + angleDiff, speed);
 
             // 1. check if position collides
             isColliding = simulation.checkIfCollides(next_pos, this);
@@ -189,6 +180,10 @@ public abstract class Animal extends GraphicalRepresentative {
 
         boolean doesInteracted = searchForGoalAndInteract(goal);
 
+        if (doesInteracted) {
+            clearRandomDirection();
+            return;
+        }
 
         // 4. check whether the goal is in sight
         var goal_position = searchForGoal(goal, sight_range);
@@ -206,12 +201,12 @@ public abstract class Animal extends GraphicalRepresentative {
         runInDirection(temporary_random_direction);
     }
 
-    protected void eatPlant(final Plant plant) {
+    protected void eatPlant(final @NotNull Plant plant) {
         hunger += plant.kcal;
         plant.death();
     }
 
-    protected void eatAnimal(final Animal animal) {
+    protected void eatAnimal(final @NotNull Animal animal) {
         hunger += animal.kcal / 3;
         animal.death();
     }

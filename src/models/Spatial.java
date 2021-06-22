@@ -74,6 +74,16 @@ public abstract class Spatial {
         return objs.get(which_one);
     }
 
+    protected Position calcNextStep(double angle, double step_range) {
+        if (angle > 360) angle -= 360;
+        if (angle < 0) angle += 360;
+
+        final var horizontal_diff = Math.cos(angle) * step_range;
+        final var vertical_diff = Math.sin(angle) * step_range;
+
+        return new Position(coords.x + horizontal_diff, coords.y + vertical_diff);
+    }
+
     // Setters
     public void changeCoords(int x, int y) {
         coords.x = x;
