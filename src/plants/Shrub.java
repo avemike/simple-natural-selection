@@ -11,7 +11,7 @@ public class Shrub extends Plant implements Edible {
     protected static BufferedImage species_image = null;
 
     protected Shrub(final Simulation simulation, final double x, final double y) {
-        super(simulation, x, y, Config.assets_path + "/" + "shrub.png");
+        super(simulation, x, y, Config.assets_path + "/" + "shrub.png", "shrub");
 
         kcal = Double.parseDouble(Config.get("plants_shrub_kcal"));
     }

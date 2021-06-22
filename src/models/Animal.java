@@ -17,7 +17,6 @@ public abstract class Animal extends GraphicalRepresentative {
     protected boolean sex;
     protected boolean is_herbivore;
     protected boolean is_meat_eater;
-    protected String specie_name;
     protected double temporary_random_direction = 0;
     protected int temporary_random_counter = 0;
     protected double power;
@@ -33,12 +32,12 @@ public abstract class Animal extends GraphicalRepresentative {
     protected double hunger_danger = Double.parseDouble(Config.get("animals_danger_hunger"));
     protected double thirst_danger = Double.parseDouble(Config.get("animals_danger_thirst"));
 
-    public Animal(final Simulation simulation, final double x, final double y, final String path, final double size) {
-        super(simulation, x, y, Integer.parseInt(Config.get("animals_pixel_width")), Integer.parseInt(Config.get("animals_pixel_height")), path);
+    public Animal(final Simulation simulation, final double x, final double y, final String path, final double size, final String specie_name) {
+        super(simulation, x, y, Integer.parseInt(Config.get("animals_pixel_width")), Integer.parseInt(Config.get("animals_pixel_height")), path, specie_name);
 
         this.size = size;
         power = size;
-        // @todo: temp
+        interaction_range = 16 + size;
     }
 
     private boolean isRatioInNorm() {

@@ -10,7 +10,7 @@ public class Tree extends Plant {
     protected static BufferedImage species_image = null;
 
     protected Tree(final Simulation simulation, final double x, final double y) {
-        super(simulation, x, y, Config.assets_path + "/" + "tree.png");
+        super(simulation, x, y, Config.assets_path + "/" + "tree.png", "tree");
     }
 
     public static Tree create(final Simulation simulation, final double x, final double y) {
