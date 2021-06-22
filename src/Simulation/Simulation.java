@@ -27,6 +27,8 @@ public class Simulation implements ActionListener {
 
     private Simulation() {
         ui = new UI(animals, plants, terrain);
+
+        javax.swing.SwingUtilities.invokeLater(ui);
     }
 
     public static void start() {

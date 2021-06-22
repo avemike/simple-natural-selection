@@ -20,7 +20,7 @@ public class Board extends JPanel {
         this.terrain = terrain;
     }
 
-    public void paintComponent(Graphics2D g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         var g2D = (Graphics2D) g;
 

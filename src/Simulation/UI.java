@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Vector;
 
-public class UI extends JFrame {
+public class UI extends JFrame implements Runnable {
     final Board board;
 
     public UI(final Vector<Animal> animals, final Vector<Plant> plants, final Terrain terrain) {
@@ -23,7 +23,8 @@ public class UI extends JFrame {
         add(board);
     }
 
-    public void paint(Graphics g) {
-        board.paintComponent((Graphics2D) g);
+    public void run() {
+        getContentPane().setLayout(new GridLayout(1, 1));
+        getContentPane().add(board);
     }
 }
