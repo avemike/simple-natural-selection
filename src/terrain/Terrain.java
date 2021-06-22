@@ -27,7 +27,7 @@ public class Terrain implements Paintable {
     }
 
     @Override
-    public void paint(Graphics graphics) {
+    public void paintComponent(Graphics2D graphics) {
         for (int row = 0; row < board.length; row++)
             for (int column = 0; column < board[row].length; column++) {
 
@@ -111,5 +111,4 @@ public class Terrain implements Paintable {
     public double getHeight() {
         return height;
     }
-
 }
