@@ -50,7 +50,7 @@ public class Fox extends Animal implements Edible, MeatEater {
 
         final var child = Fox.create(simulation, (coords.x + animal.getX()) / 2, (coords.y + animal.getY()) / 2, new_size);
 
-        boolean isColliding = simulation.checkIfCollides(child.getPosition(), child);
+        boolean isColliding = simulation.checkIfCollides(child.getPosition(), new_size + 4);
         int range = 4;
         int angle = 0;
         Position next_pos;
@@ -64,7 +64,7 @@ public class Fox extends Animal implements Edible, MeatEater {
             }
             next_pos = child.calcNextStep(angle += 45, range);
 
-            isColliding = simulation.checkIfCollides(next_pos, child);
+            isColliding = simulation.checkIfCollides(next_pos, new_size + 4);
         }
 
         simulation.addAnimal(child);

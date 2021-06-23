@@ -21,7 +21,9 @@ public class Simulation implements ActionListener {
     private final UI ui;
     private final Terrain terrain = new Terrain();
     private final Vector<Animal> animals = new Vector<>();
+    private final Vector<Animal> animals_buffer = new Vector<>();
     private final Vector<Plant> plants = new Vector<>();
+    private final Vector<Plant> plants_buffer = new Vector<>();
 
     private int event_loop_condition = 100000;
 
@@ -97,33 +99,46 @@ public class Simulation implements ActionListener {
         throw new Exception("Not implemented yet");
     }
 
+    public void addAnimal(final Animal animal) {
+        animals_buffer.add(animal);
+    }
+
+    public void addPlant(final Plant plant) {
+        plants_buffer.add(plant);
+    }
+
     // @todo:
     //  public Vector<Animal> searchForVegetation(final Position src, final double range) {
     //  }
-
-    public boolean checkIfCollides(final Position pos, final Animal current_animal) {
+    public boolean checkIfCollides(final Position pos, final double range) {
         // 0. check collisions with instances
         for (var animal : animals) {
-            if (animal == current_animal) continue;
-            boolean isColliding = isInRange(animal.getPosition(), pos, animal.getSize());
+            if (animal.getPosition() != pos) continue;
+            boolean isColliding = isInRange(pos, animal.getPosition(), 4 + animal.getSize() + range);
+
+            if (isColliding) return true;
+        }
+        for (var animal : animals_buffer) {
+            if (animal.getPosition() != pos) continue;
+            boolean isColliding = isInRange(pos, animal.getPosition(), 4 + animal.getSize() + range);
 
             if (isColliding) return true;
         }
         // @todo: vegetation
 
         // 1. check collision with borders
-        if (pos.x < 0 || pos.y < 0) return true;
-        if (pos.x > terrain.getWidth() || pos.y > terrain.getHeight()) return true;
+        if (pos.x < 16 || pos.y < 16) return true;
+        if (pos.x > terrain.getWidth() - 16 || pos.y > terrain.getHeight() - 16) return true;
 
         // 2. check collision with water
-        if (terrain.isCollidingWithWater(pos)) return true;
+        if (terrain.isCollidingWithWater(pos, range)) return true;
 
         // 3. otherwise return false
         return false;
 
     }
 
-    private void loopStep() {
+    private void loopStep() throws Exception {
         if (hasLoopEnded()) return;
 
         // 1. run animals
@@ -134,10 +149,20 @@ public class Simulation implements ActionListener {
         // 2. "garbage collector"
         animals.removeIf(animal -> animal.is_dead);
 
-        // 3. paint
+        // 3. add instances from buffers (newly created)
+        if (!animals_buffer.isEmpty()) {
+            System.out.println("I ShITTED MYSELF");
+        }
+        animals.addAll(animals_buffer);
+        plants.addAll(plants_buffer);
+
+        animals_buffer.clear();
+        plants_buffer.clear();
+
+        // 4. paint
         ui.repaint();
 
-        // 4. change iteration condition
+        // 5. change iteration condition
         changeLoopCondition();
     }
 
@@ -147,12 +172,12 @@ public class Simulation implements ActionListener {
         timer.start();
     }
 
-    private Position generateNonCollidingPos() {
+    private Position generateNonCollidingPos(final double size) {
         Position random_position;
         int max_counter = 40;
         do {
             random_position = new Position(Math.random() * terrain.getWidth(), Math.random() * terrain.getHeight());
-        } while (checkIfCollides(random_position, null) && max_counter-- > 0);
+        } while (checkIfCollides(random_position, size) && max_counter-- > 0);
 
         return random_position;
     }
@@ -160,31 +185,34 @@ public class Simulation implements ActionListener {
     private void initializeAnimals() {
         // 1. Add foxes
         for (int x = 0, max = Integer.parseInt(Config.get("animals_foxes_number")); x < max; x++) {
-            var random_position = generateNonCollidingPos();
+            var randomness_factor = 0.85 + Math.random() * 0.3;
+            var size = randomness_factor * Double.parseDouble(Config.get("fox_init_size"));
 
-            double randomness_factor = 0.85 + Math.random() * 0.3;
-            animals.add(Fox.create(this, random_position.x, random_position.y, randomness_factor * Double.parseDouble(Config.get("fox_init_size"))));
+            var random_position = generateNonCollidingPos(size);
+
+            animals.add(Fox.create(this, random_position.x, random_position.y, size));
         }
         // 2. Add rabbits
         for (int x = 0, max = Integer.parseInt(Config.get("animals_rabbits_number")); x < max; x++) {
-            var random_position = generateNonCollidingPos();
+            var randomness_factor = 0.85 + Math.random() * 0.3;
+            var size = randomness_factor * Double.parseDouble(Config.get("rabbit_init_size"));
 
-            double randomness_factor = 0.85 + Math.random() * 0.3;
-            animals.add(Rabbit.create(this, random_position.x, random_position.y, randomness_factor * Double.parseDouble(Config.get("rabbit_init_size"))));
+            var random_position = generateNonCollidingPos(size);
+
+            animals.add(Rabbit.create(this, random_position.x, random_position.y, size));
         }
-
     }
 
     private void initializePlants() {
         // 1. Add trees
         for (int x = 0, max = Integer.parseInt(Config.get("plants_trees_number")); x < max; x++) {
-            var random_position = generateNonCollidingPos();
+            var random_position = generateNonCollidingPos(0);
 
             plants.add(Tree.create(this, random_position.x, random_position.y));
         }
         // 2. Add shrubs
         for (int x = 0, max = Integer.parseInt(Config.get("plants_shrubs_number")); x < max; x++) {
-            var random_position = generateNonCollidingPos();
+            var random_position = generateNonCollidingPos(0);
 
             plants.add(Shrub.create(this, random_position.x, random_position.y));
         }
@@ -192,6 +220,10 @@ public class Simulation implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        loopStep();
+        try {
+            loopStep();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 }

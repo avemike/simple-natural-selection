@@ -11,6 +11,8 @@ public class Tree extends Plant {
 
     protected Tree(final Simulation simulation, final double x, final double y) {
         super(simulation, x, y, Config.assets_path + "/" + "tree.png", "tree");
+
+
     }
 
     public static Tree create(final Simulation simulation, final double x, final double y) {

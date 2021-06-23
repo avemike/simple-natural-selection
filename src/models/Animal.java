@@ -110,7 +110,7 @@ public abstract class Animal extends GraphicalRepresentative {
             next_pos = calcNextStep(angle + angleDiff, speed);
 
             // 1. check if position collides
-            isColliding = simulation.checkIfCollides(next_pos, this);
+            isColliding = simulation.checkIfCollides(next_pos, 2);
 
             if (!isColliding) break;
         }
