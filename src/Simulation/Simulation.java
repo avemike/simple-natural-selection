@@ -4,6 +4,7 @@ import animals.Fox;
 import animals.Rabbit;
 import models.Animal;
 import models.Plant;
+import models.Representative;
 import plants.Shrub;
 import plants.Tree;
 import services.Config;
@@ -110,16 +111,16 @@ public class Simulation implements ActionListener {
     // @todo:
     //  public Vector<Animal> searchForVegetation(final Position src, final double range) {
     //  }
-    public boolean checkIfCollides(final Position pos, final double range) {
+    public boolean checkIfCollides(final Position pos, final double range, final Representative original) {
         // 0. check collisions with instances
         for (var animal : animals) {
-            if (animal.getPosition() != pos) continue;
+            if (animal == original) continue;
             boolean isColliding = isInRange(pos, animal.getPosition(), 4 + animal.getSize() + range);
 
             if (isColliding) return true;
         }
         for (var animal : animals_buffer) {
-            if (animal.getPosition() != pos) continue;
+            if (animal == original) continue;
             boolean isColliding = isInRange(pos, animal.getPosition(), 4 + animal.getSize() + range);
 
             if (isColliding) return true;
@@ -150,9 +151,6 @@ public class Simulation implements ActionListener {
         animals.removeIf(animal -> animal.is_dead);
 
         // 3. add instances from buffers (newly created)
-        if (!animals_buffer.isEmpty()) {
-            System.out.println("I ShITTED MYSELF");
-        }
         animals.addAll(animals_buffer);
         plants.addAll(plants_buffer);
 
@@ -177,7 +175,7 @@ public class Simulation implements ActionListener {
         int max_counter = 40;
         do {
             random_position = new Position(Math.random() * terrain.getWidth(), Math.random() * terrain.getHeight());
-        } while (checkIfCollides(random_position, size) && max_counter-- > 0);
+        } while (checkIfCollides(random_position, size, null) && max_counter-- > 0);
 
         return random_position;
     }

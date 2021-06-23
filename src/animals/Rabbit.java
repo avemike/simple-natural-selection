@@ -48,7 +48,7 @@ public class Rabbit extends Animal implements Edible, Herbivore {
 
         final var child = Rabbit.create(simulation, (coords.x + animal.getX()) / 2, (coords.y + animal.getY()) / 2, new_size);
 
-        boolean isColliding = simulation.checkIfCollides(child.getPosition(), new_size + 4);
+        boolean isColliding = simulation.checkIfCollides(child.getPosition(), new_size + 4, child);
         int range = 4;
         int angle = 0;
         Position next_pos;
@@ -62,7 +62,7 @@ public class Rabbit extends Animal implements Edible, Herbivore {
             }
             next_pos = child.calcNextStep(angle += 45, range);
 
-            isColliding = simulation.checkIfCollides(next_pos, new_size + 4);
+            isColliding = simulation.checkIfCollides(next_pos, new_size + 4, child);
         }
 
         simulation.addAnimal(child);
