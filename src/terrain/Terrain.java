@@ -49,33 +49,42 @@ public class Terrain implements Paintable {
             }
     }
 
+    public char getField(int field_x, int field_y) {
+        if (field_x < 0) field_x = 0;
+        if (field_y < 0) field_y = 0;
+        if (field_x >= map_width) field_x = map_width - 1;
+        if (field_y >= map_height) field_y = map_height - 1;
+
+        return board[field_y][field_x];
+    }
+
     public boolean isCollidingWithWater(final Position pos, final double collision_range) {
         // 0. check most direct position
         int field_x = ((int) pos.x) / field_size;
         int field_y = ((int) pos.y) / field_size;
 
-        if (board[field_y][field_x] == water_symbol) return true;
+        if (getField(field_x, field_y) == water_symbol) return true;
 
         // 1. check 4 nearby positions
         // 1.1 left
         var field = ((int) (pos.x - collision_range)) / field_size;
         if (field != field_x) {
-            if (board[field_y][field] == water_symbol) return true;
+            if (getField(field, field_y) == water_symbol) return true;
         }
         // 1.2 right
         field = ((int) (pos.x + collision_range)) / field_size;
         if (field != field_x) {
-            if (board[field_y][field] == water_symbol) return true;
+            if (getField(field, field_y) == water_symbol) return true;
         }
         // 1.3 up
         field = ((int) (pos.y - collision_range)) / field_size;
         if (field != field_y) {
-            if (board[field][field_x] == water_symbol) return true;
+            if (getField(field_x, field) == water_symbol) return true;
         }
         // 1.4 down
         field = ((int) (pos.y + collision_range)) / field_size;
         if (field != field_y) {
-            if (board[field][field_x] == water_symbol) return true;
+            if (getField(field_x, field) == water_symbol) return true;
         }
 
         return false;
