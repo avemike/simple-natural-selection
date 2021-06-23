@@ -74,7 +74,7 @@ public abstract class Spatial {
         return objs.get(which_one);
     }
 
-    protected Position calcNextStep(double angle, double step_range) {
+    public Position calcNextStep(double angle, double step_range) {
         if (angle > 360) angle -= 360;
         if (angle < 0) angle += 360;
 

@@ -100,7 +100,7 @@ public abstract class Animal extends GraphicalRepresentative {
 
     protected void runTo(final Position goal, double angle) {
         if (goal != null) angle = getAngle(coords, goal);
-        final var angleDiffs = new int[]{0, 45, -45, 90, -90, 135, -135, 180, 225, -225, 270, -270};
+        final var angleDiffs = new int[]{0, 15, -15, 30, -30, 45, -45, 60, -60, 90, -90, 135, -135, 180, 225, -225, 270, -270};
 
         Position next_pos = coords;
         boolean isColliding = false;
@@ -134,7 +134,7 @@ public abstract class Animal extends GraphicalRepresentative {
      */
     public Needs setMainGoal() {
         // 1. checks whether the main coefficients are considered normal
-        if (isRatioInNorm()) return Needs.REPRODUCTION;
+        if (isRatioInNorm() && reproduction <= 0) return Needs.REPRODUCTION;
 
         // 2. check if in danger state of hunger/thirst
         if (thirst <= thirst_danger || hunger <= hunger_danger) {
@@ -143,18 +143,25 @@ public abstract class Animal extends GraphicalRepresentative {
         }
 
         // 3. choose smaller coefficient
-        if (reproduction < hunger && reproduction < thirst) return Needs.REPRODUCTION;
+        if (reproduction < hunger && reproduction < thirst && reproduction <= 0) return Needs.REPRODUCTION;
         if (thirst <= hunger) return Needs.THIRST;
         return Needs.HUNGER;
+    }
+
+    public void fillReproduction() {
+        reproduction = 100;
+        hunger -= Double.parseDouble(Config.get("animals_reproduction_cost_hunger"));
+        // @todo: thirst -= Double.parseDouble(Config.get("animals_reproduction_cost_hunger"));
     }
 
     /**
      * Method describing the behaviour of an individual in one iteration of the "event loop"
      */
-    public void act() {
+    public void act() throws Exception {
         if (is_dead) return;
 
         // 0. needs drain
+        reproduction -= 1;
         // @todo: implement needs drain
         // 1. check status of needs
         if (hunger <= 0 || thirst <= 0) {
@@ -211,7 +218,7 @@ public abstract class Animal extends GraphicalRepresentative {
         animal.death();
     }
 
-    protected boolean searchForGoalAndInteract(Needs goal) {
+    protected boolean searchForGoalAndInteract(Needs goal) throws Exception {
         switch (goal) {
             case HUNGER -> {
                 if (is_herbivore) {
@@ -251,7 +258,7 @@ public abstract class Animal extends GraphicalRepresentative {
                 if (closest_animal != null) {
                     // @todo: expand reproduce logic
 
-
+                    reproduce(closest_animal);
                 }
 
                 return closest_animal != null;
@@ -259,6 +266,8 @@ public abstract class Animal extends GraphicalRepresentative {
         }
         return false;
     }
+
+    protected abstract void reproduce(Animal animal) throws Exception;
 
     private void clearRandomDirection() {
         temporary_random_counter = 0;

@@ -5,6 +5,8 @@ import interfaces.Edible;
 import interfaces.Herbivore;
 import models.Animal;
 import services.Config;
+import utils.Position;
+import utils.Reproduction;
 
 import java.awt.image.BufferedImage;
 
@@ -37,4 +39,33 @@ public class Rabbit extends Animal implements Edible, Herbivore {
             return null;
         }
     }
+
+    protected void reproduce(Animal animal) throws Exception {
+        fillReproduction();
+        animal.fillReproduction();
+
+        double new_size = Reproduction.newSize(this, animal);
+
+        final var child = Rabbit.create(simulation, (coords.x + animal.getX()) / 2, (coords.y + animal.getY()) / 2, new_size);
+
+        boolean isColliding = simulation.checkIfCollides(child.getPosition(), child);
+        int range = 4;
+        int angle = 0;
+        Position next_pos;
+
+        while (isColliding) {
+            if (angle == 360) {
+                angle = 0;
+                range += 4;
+
+                if (range > 160) throw new Exception("No space for creating new animals!");
+            }
+            next_pos = child.calcNextStep(angle += 45, range);
+
+            isColliding = simulation.checkIfCollides(next_pos, child);
+        }
+
+        simulation.addAnimal(child);
+    }
+
 }
