@@ -62,7 +62,7 @@ public class Rabbit extends Animal implements Edible, Herbivore {
             }
             next_pos = child.calcNextStep(angle += 45, range);
 
-            isColliding = simulation.checkIfCollides(next_pos, new_size + 4, child);
+            isColliding = simulation.checkIfCollides(next_pos, new_size * 4, child);
         }
 
         simulation.addAnimal(child);

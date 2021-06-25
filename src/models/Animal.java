@@ -102,7 +102,8 @@ public abstract class Animal extends GraphicalRepresentative {
 
     protected void runTo(final Position goal, double angle) {
         if (goal != null) angle = getAngle(coords, goal);
-        final var angleDiffs = new int[]{0, 15, -15, 30, -30, 45, -45, 60, -60, 90, -90, 135, -135, 180, 225, -225, 270, -270};
+        final var angleDiffs = new int[]{0, 7, -7, 15, -15, 22, -22, 30, -30, 38, 45, -45, 52, -52, 60, -60, 75, -75,
+                90, -90, 110, -110, 135, -135, 160, -160, 180};
 
         Position next_pos = coords;
         boolean isColliding = false;
@@ -118,7 +119,7 @@ public abstract class Animal extends GraphicalRepresentative {
         }
         // 2. if everywhere were collision, get stuck
         if (isColliding) {
-            Simulation.log.log(Level.WARNING, "(" + coords.x + " " + coords.y + ") - Stuck in `runTo` [" + specie_name + "]");
+            Simulation.log.log(Level.WARNING, "(" + coords.x + " " + coords.y + ") - Stuck [" + specie_name + "]");
             return;
         }
 

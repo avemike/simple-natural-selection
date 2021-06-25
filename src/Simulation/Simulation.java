@@ -23,14 +23,10 @@ public class Simulation implements ActionListener {
     public final static Logger log = Logger.getLogger("Simulation");
     private final UI ui;
     private final Terrain terrain = new Terrain();
-    private final Vector<Animal> animals = new Vector<>();
-    private final Vector<Animal> animals_buffer = new Vector<>();
-    private final Vector<Plant> plants = new Vector<>();
-    private final Vector<Plant> plants_buffer = new Vector<>();
     private int event_loop_condition = 100000;
 
     private Simulation() {
-        ui = new UI(animals, plants, terrain);
+        ui = new UI(terrain);
 
         javax.swing.SwingUtilities.invokeLater(ui);
     }
@@ -59,7 +55,7 @@ public class Simulation implements ActionListener {
      * @todo search for the nearest predator
      */
     public Position findNearbyPredator(final Position animal_pos, final double power, final double range) {
-        for (var animal : animals) {
+        for (var animal : InstancesContainer.animals) {
             // 0. check whether it is a threat
             if (animal.getPower() <= power) continue;
 
@@ -76,7 +72,7 @@ public class Simulation implements ActionListener {
     public Vector<Plant> searchForPlants(final Position src, final double range) {
         var found_plants = new Vector<Plant>();
 
-        for (var plant : plants) {
+        for (var plant : InstancesContainer.plants) {
             boolean isInRange = isInRange(src, plant.getPosition(), range);
 
             if (isInRange) found_plants.add(plant);
@@ -88,7 +84,7 @@ public class Simulation implements ActionListener {
     public Vector<Animal> searchForAnimals(final Position src, final double range) {
         var found_animals = new Vector<Animal>();
 
-        for (var animal : animals) {
+        for (var animal : InstancesContainer.animals) {
             boolean isInRange = isInRange(src, animal.getPosition(), range);
 
             if (isInRange && animal.getPosition() != src) found_animals.add(animal);
@@ -102,11 +98,11 @@ public class Simulation implements ActionListener {
     }
 
     public void addAnimal(final Animal animal) {
-        animals_buffer.add(animal);
+        InstancesContainer.animals_buffer.add(animal);
     }
 
     public void addPlant(final Plant plant) {
-        plants_buffer.add(plant);
+        InstancesContainer.plants_buffer.add(plant);
     }
 
     // @todo:
@@ -114,13 +110,13 @@ public class Simulation implements ActionListener {
     //  }
     public boolean checkIfCollides(final Position pos, final double range, final Representative original) {
         // 0. check collisions with instances
-        for (var animal : animals) {
+        for (var animal : InstancesContainer.animals) {
             if (animal == original) continue;
             boolean isColliding = isInRange(pos, animal.getPosition(), 4 + animal.getSize() + range);
 
             if (isColliding) return true;
         }
-        for (var animal : animals_buffer) {
+        for (var animal : InstancesContainer.animals_buffer) {
             if (animal == original) continue;
             boolean isColliding = isInRange(pos, animal.getPosition(), 4 + animal.getSize() + range);
 
@@ -144,19 +140,19 @@ public class Simulation implements ActionListener {
         if (hasLoopEnded()) return;
 
         // 1. run animals
-        for (var animal : animals) {
+        for (var animal : InstancesContainer.animals) {
             if (animal != null)
                 animal.act();
         }
         // 2. "garbage collector"
-        animals.removeIf(animal -> animal.is_dead);
+        InstancesContainer.animals.removeIf(animal -> animal.is_dead);
 
         // 3. add instances from buffers (newly created)
-        animals.addAll(animals_buffer);
-        plants.addAll(plants_buffer);
+        InstancesContainer.animals.addAll(InstancesContainer.animals_buffer);
+        InstancesContainer.plants.addAll(InstancesContainer.plants_buffer);
 
-        animals_buffer.clear();
-        plants_buffer.clear();
+        InstancesContainer.animals_buffer.clear();
+        InstancesContainer.plants_buffer.clear();
 
         // 4. paint
         ui.repaint();
@@ -189,7 +185,7 @@ public class Simulation implements ActionListener {
 
             var random_position = generateNonCollidingPos(size);
 
-            animals.add(Fox.create(this, random_position.x, random_position.y, size));
+            InstancesContainer.animals.add(Fox.create(this, random_position.x, random_position.y, size));
         }
         // 2. Add rabbits
         for (int x = 0, max = Integer.parseInt(Config.get("animals_rabbits_number")); x < max; x++) {
@@ -198,7 +194,7 @@ public class Simulation implements ActionListener {
 
             var random_position = generateNonCollidingPos(size);
 
-            animals.add(Rabbit.create(this, random_position.x, random_position.y, size));
+            InstancesContainer.animals.add(Rabbit.create(this, random_position.x, random_position.y, size));
         }
     }
 
@@ -207,13 +203,13 @@ public class Simulation implements ActionListener {
         for (int x = 0, max = Integer.parseInt(Config.get("plants_trees_number")); x < max; x++) {
             var random_position = generateNonCollidingPos(0);
 
-            plants.add(Tree.create(this, random_position.x, random_position.y));
+            InstancesContainer.plants.add(Tree.create(this, random_position.x, random_position.y));
         }
         // 2. Add shrubs
         for (int x = 0, max = Integer.parseInt(Config.get("plants_shrubs_number")); x < max; x++) {
             var random_position = generateNonCollidingPos(0);
 
-            plants.add(Shrub.create(this, random_position.x, random_position.y));
+            InstancesContainer.plants.add(Shrub.create(this, random_position.x, random_position.y));
         }
     }
 
