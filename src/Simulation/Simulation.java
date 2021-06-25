@@ -15,17 +15,18 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
+import java.util.logging.Logger;
 
 import static utils.Position.isInRange;
 
 public class Simulation implements ActionListener {
+    public final static Logger log = Logger.getLogger("Simulation");
     private final UI ui;
     private final Terrain terrain = new Terrain();
     private final Vector<Animal> animals = new Vector<>();
     private final Vector<Animal> animals_buffer = new Vector<>();
     private final Vector<Plant> plants = new Vector<>();
     private final Vector<Plant> plants_buffer = new Vector<>();
-
     private int event_loop_condition = 100000;
 
     private Simulation() {

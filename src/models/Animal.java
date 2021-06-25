@@ -6,6 +6,8 @@ import services.Config;
 import utils.Needs;
 import utils.Position;
 
+import java.util.logging.Level;
+
 import static utils.Position.getAngle;
 
 
@@ -115,7 +117,10 @@ public abstract class Animal extends GraphicalRepresentative {
             if (!isColliding) break;
         }
         // 2. if everywhere were collision, get stuck
-        if (isColliding) return;
+        if (isColliding) {
+            Simulation.log.log(Level.WARNING, "(" + coords.x + " " + coords.y + ") - Stuck in `runTo` [" + specie_name + "]");
+            return;
+        }
 
         // 3. move to position
         coords = next_pos;
