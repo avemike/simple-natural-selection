@@ -138,11 +138,11 @@ public abstract class AnimalNeeds extends AnimalAttributes {
     // = = = = = = = = = = //
 
     public void hungerDrain() {
-        hunger -= 10;
+        hunger -= 0.1;
     }
 
     public void thirstDrain() {
-        thirst -= 5;
+        thirst -= 0.2;
     }
 
     public void reproductionDrain() {
@@ -164,5 +164,9 @@ public abstract class AnimalNeeds extends AnimalAttributes {
         final double percentage_filled = (kcal * 100) / this.kcal;
 
         hunger += percentage_filled;
+    }
+
+    public boolean shouldDie() {
+        return hunger <= 0 || thirst <= 0;
     }
 }

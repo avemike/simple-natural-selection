@@ -20,20 +20,21 @@ public abstract class AnimalInteraction extends AnimalMovement {
         if (is_dead) return;
 
         // 0. needs drain
-        reproduction -= 1;
-        // @todo: implement needs drain
+
+        hungerDrain();
+        reproductionDrain();
+
         // 1. check status of needs
-        if (hunger <= 0 || thirst <= 0) {
+        if (shouldDie()) {
             death();
 
-            clearRandomDirection();
             return;
         }
 
         // 2. check if predator is in sight
         final Position nearby_predator = simulation.findNearbyPredator(coords, power, sight_range);
 
-        // OPTIONAL: run away
+        // 2.1 OPTIONAL: run away
         if (nearby_predator != null) {
             runToPosition(Position.oppositePosition(coords, nearby_predator));
 
