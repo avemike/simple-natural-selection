@@ -12,7 +12,11 @@ public abstract class Plant extends GraphicalRepresentative {
         super(simulation, x, y, Integer.parseInt(Config.get("plants_pixel_size")), path, specie_name);
     }
 
-    protected void death() {
+    public void death() {
         is_dead = true;
+    }
+
+    public double getKcal() {
+        return kcal;
     }
 }

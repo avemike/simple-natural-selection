@@ -14,7 +14,7 @@ public class Rabbit extends Animal implements Edible, Herbivore {
     protected static BufferedImage species_image = null;
 
     protected Rabbit(final Simulation simulation, final double x, final double y, final double size) {
-        super(simulation, x, y, Config.assets_path + "/" + "rabbit.png", Integer.parseInt(Config.get("rabbit_init_size")), "rabbit");
+        super(simulation, x, y, Integer.parseInt(Config.get("rabbit_init_size")), Config.assets_path + "/" + "rabbit.png", "rabbit");
 
         final double specie_ratio = size / Double.parseDouble(Config.get("rabbit_init_size"));
 

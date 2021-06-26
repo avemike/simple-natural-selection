@@ -14,7 +14,7 @@ public class Fox extends Animal implements Edible, MeatEater {
     protected static BufferedImage species_image = null;
 
     protected Fox(final Simulation simulation, final double x, final double y, final double size) {
-        super(simulation, x, y, Config.assets_path + "/" + "fox.png", size, "fox");
+        super(simulation, x, y, size, Config.assets_path + "/" + "fox.png", "fox");
 
         final double specie_ratio = size / Double.parseDouble(Config.get("fox_init_size"));
 
