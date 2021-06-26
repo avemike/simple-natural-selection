@@ -115,11 +115,8 @@ public abstract class AnimalInteraction extends AnimalMovement {
 
                 var closest_animal = getClosestAnimal(animals);
 
-                if (closest_animal != null) {
-                    // @todo: expand reproduce logic
-
+                if (closest_animal != null)
                     reproduce(closest_animal);
-                }
 
                 return closest_animal != null;
             }

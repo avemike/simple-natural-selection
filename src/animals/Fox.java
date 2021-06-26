@@ -43,6 +43,11 @@ public class Fox extends Animal implements Edible {
         }
     }
 
+    @Override
+    public void reproductionDrain() {
+        reproduction -= 0.2;
+    }
+
     protected void reproduce(Animal animal) throws Exception {
         fillReproduction();
         animal.fillReproduction();

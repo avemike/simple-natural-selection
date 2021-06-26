@@ -41,6 +41,11 @@ public class Rabbit extends Animal {
         }
     }
 
+    @Override
+    public void reproductionDrain() {
+        reproduction -= 2;
+    }
+
     protected void reproduce(Animal animal) throws Exception {
         fillReproduction();
         animal.fillReproduction();
@@ -51,18 +56,18 @@ public class Rabbit extends Animal {
 
         assert child != null;
         boolean isColliding = Simulation.checkIfCollides(child.getPosition(), new_size + 4, child);
-        int range = 4;
+        int range = 1;
         int angle = 0;
         Position next_pos = child.getPosition();
 
         while (isColliding) {
             if (angle == 360) {
                 angle = 0;
-                range += 4;
+                range += 2;
 
-                if (range > 160) throw new Exception("No space for creating new animals!");
+                if (range > 5 * size) return;
             }
-            next_pos = child.calcNextStep(angle += 45, range);
+            next_pos = child.calcNextStep(angle += 30, range);
 
             isColliding = Simulation.checkIfCollides(next_pos, new_size + 2, child);
         }

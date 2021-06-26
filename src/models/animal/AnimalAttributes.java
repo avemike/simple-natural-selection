@@ -1,6 +1,7 @@
 package models.animal;
 
 import models.GraphicalRepresentative;
+import services.Config;
 
 /**
  * @apiNote 100 hunger means fulfilled, 0 hunger is starvation
@@ -20,7 +21,7 @@ public abstract class AnimalAttributes extends GraphicalRepresentative {
         super(x, y, (int) size, path, specie_name);
         this.size = size;
 
-        power = size;
+        power = Double.parseDouble(Config.get(specie_name + "_power"));
         interaction_range = 16 + size;
     }
 
