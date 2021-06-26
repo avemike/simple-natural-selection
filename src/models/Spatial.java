@@ -85,8 +85,9 @@ public abstract class Spatial {
     }
 
     // Setters
-    public void changeCoords(int x, int y) {
-        coords.x = x;
-        coords.y = y;
+    public void setCoords(final Position coords) {
+        this.coords.x = coords.x;
+        this.coords.y = coords.y;
     }
+
 }

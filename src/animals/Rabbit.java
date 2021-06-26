@@ -52,7 +52,7 @@ public class Rabbit extends Animal implements Edible, Herbivore {
         boolean isColliding = simulation.checkIfCollides(child.getPosition(), new_size + 4, child);
         int range = 4;
         int angle = 0;
-        Position next_pos;
+        Position next_pos = child.getPosition();
 
         while (isColliding) {
             if (angle == 360) {
@@ -66,6 +66,7 @@ public class Rabbit extends Animal implements Edible, Herbivore {
             isColliding = simulation.checkIfCollides(next_pos, new_size * 4, child);
         }
 
+        child.setCoords(next_pos);
         InstancesContainer.addAnimal(child);
     }
 
