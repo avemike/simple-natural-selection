@@ -79,6 +79,8 @@ public abstract class AnimalInteraction extends AnimalMovement {
     }
 
     protected boolean searchForGoalAndInteract(Needs goal) throws Exception {
+        if (goal == null) return false;
+        
         switch (goal) {
             case HUNGER -> {
                 if (is_herbivore) {

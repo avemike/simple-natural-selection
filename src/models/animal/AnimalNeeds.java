@@ -24,6 +24,8 @@ public abstract class AnimalNeeds extends AnimalAttributes {
     // Danger level
     protected double hunger_danger = Double.parseDouble(Config.get("animals_danger_hunger"));
     protected double thirst_danger = Double.parseDouble(Config.get("animals_danger_thirst"));
+    protected double hunger_stable = Double.parseDouble(Config.get("animals_stable_hunger"));
+    protected double thirst_stable = Double.parseDouble(Config.get("animals_stable_thirst"));
 
     public AnimalNeeds(final double x, final double y, final double size,
                        final String path, final String specie_name) {
@@ -34,7 +36,7 @@ public abstract class AnimalNeeds extends AnimalAttributes {
     }
 
     private boolean isRatioInNorm() {
-        return thirst >= Double.parseDouble(Config.get("animals_stable_thirst")) && hunger >= Double.parseDouble(Config.get("animals_stable_hunger"));
+        return thirst >= thirst_stable && hunger >= hunger_stable;
     }
 
     public void death() {
@@ -75,6 +77,8 @@ public abstract class AnimalNeeds extends AnimalAttributes {
     }
 
     protected Position searchForGoal(final Needs goal, final double range) {
+        if (goal == null) return null;
+
         switch (goal) {
             case HUNGER -> {
                 if (is_herbivore) {
@@ -123,8 +127,10 @@ public abstract class AnimalNeeds extends AnimalAttributes {
 
         // 3. choose smaller coefficient
         if (reproduction < hunger && reproduction < thirst && reproduction <= 0) return Needs.REPRODUCTION;
-        if (thirst <= hunger) return Needs.THIRST;
-        return Needs.HUNGER;
+        if (thirst <= hunger && thirst < thirst_stable) return Needs.THIRST;
+        if (hunger < hunger_stable) return Needs.HUNGER;
+
+        return null;
     }
 
     public void fillReproduction() {
