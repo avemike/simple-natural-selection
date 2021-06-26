@@ -9,6 +9,7 @@
 - [ ] implement water need:
     - create `non-paintable`and durable spots aligned to border of each water field (let's say 10px spacing)
     - these spots would be water resources
+- [ ] render instances with higher `coords.y` first
 
 #### Design patterns
 

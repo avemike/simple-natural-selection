@@ -7,10 +7,11 @@ import java.awt.image.BufferedImage;
 
 public class Tree extends Plant {
     protected static BufferedImage species_image = null;
-    public final boolean is_edible = false;
 
     protected Tree(final double x, final double y) {
         super(x, y, Config.assets_path + "/" + "tree.png", "tree");
+
+        is_edible = false;
     }
 
     public static Tree create(final double x, final double y) {

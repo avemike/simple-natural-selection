@@ -7,12 +7,12 @@ import java.awt.image.BufferedImage;
 
 public class Shrub extends Plant {
     protected static BufferedImage species_image = null;
-    public final boolean is_edible = true;
 
     protected Shrub(final double x, final double y) {
         super(x, y, Config.assets_path + "/" + "shrub.png", "shrub");
 
         kcal = Double.parseDouble(Config.get("plants_shrub_kcal"));
+        is_edible = true;
     }
 
     public static Shrub create(final double x, final double y) {

@@ -47,7 +47,7 @@ public abstract class AnimalNeeds extends AnimalAttributes {
 
     protected Plant searchForPlant(final double range) {
         var goals = Simulation.searchForPlants(coords, range);
-        goals.removeIf(plant -> !plant.isEdible);
+        goals.removeIf(plant -> !plant.is_edible);
 
         return getClosestPlant(goals);
     }

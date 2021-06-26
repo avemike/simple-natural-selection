@@ -70,5 +70,4 @@ public class Rabbit extends Animal {
         child.setCoords(next_pos);
         InstancesContainer.addAnimal(child);
     }
-
 }

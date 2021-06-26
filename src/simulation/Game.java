@@ -44,6 +44,7 @@ public class Game extends WorldInteraction implements ActionListener {
         }
         // 2. "garbage collector"
         InstancesContainer.animals.removeIf(animal -> animal.is_dead);
+        InstancesContainer.plants.removeIf(plant -> plant.is_dead);
 
         // 3. create missing edible plants
         final var current_edible_plants_num = InstancesContainer.plants.stream()

@@ -83,7 +83,7 @@ public abstract class AnimalInteraction extends AnimalMovement {
             case HUNGER -> {
                 if (is_herbivore) {
                     var goals = Simulation.searchForPlants(coords, interaction_range);
-                    goals.removeIf(plant -> !plant.isEdible);
+                    goals.removeIf(plant -> !plant.is_edible);
 
                     var closest_plant = getClosestPlant(goals);
 
