@@ -19,4 +19,9 @@ public abstract class Plant extends GraphicalRepresentative implements Edible {
     public double getKcal() {
         return kcal;
     }
+
+    // Small and constant collision
+    public double getSize() {
+        return 3;
+    }
 }

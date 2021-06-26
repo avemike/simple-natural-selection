@@ -79,6 +79,18 @@ public class WorldInteraction {
 
             if (isColliding) return true;
         }
+        for (var plant : InstancesContainer.plants) {
+            if (plant == original) continue;
+            boolean isColliding = isInRange(pos, plant.getPosition(), 2 + plant.getSize() + range);
+
+            if (isColliding) return true;
+        }
+        for (var plant : InstancesContainer.plants_buffer) {
+            if (plant == original) continue;
+            boolean isColliding = isInRange(pos, plant.getPosition(), 2 + plant.getSize() + range);
+
+            if (isColliding) return true;
+        }
 
         // 1. check collision with borders
         if (pos.x < 16 || pos.y < 16) return true;

@@ -3,16 +3,17 @@
 > **⚠ Warning**
 > Project is currently under development
 
-### Coding conventions
+### Ideas for expansion
+
+- [ ] split `size` parameter into two: `render_size` and `interaction_size`.
+- [ ] implement water need:
+    - create `non-paintable`and durable spots aligned to border of each water field (let's say 10px spacing)
+    - these spots would be water resources
+
+#### Design patterns
 
 #### Naming
 
 - classes: UpperCamelCase
 - methods: lowerCamelCase
 - variables: snake_case
-
-### Todo
-
-- [ ] 
-- [ ] Separate `fps` from `event loop iteration`
-- [ ] Improve animation display (remove flickering)
