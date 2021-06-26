@@ -1,6 +1,6 @@
 package models.animal;
 
-import Simulation.Simulation;
+import simulation.Simulation;
 import utils.Position;
 
 import java.util.logging.Level;
@@ -18,8 +18,8 @@ public abstract class AnimalMovement extends AnimalNeeds {
     protected int temporary_random_counter = 0;
     protected int temporary_random_counter_base = 10;
 
-    public AnimalMovement(final Simulation simulation, final double x, final double y, final double size, final String path, final String specie_name) {
-        super(simulation, x, y, (int) size, path, specie_name);
+    public AnimalMovement(final double x, final double y, final double size, final String path, final String specie_name) {
+        super(x, y, (int) size, path, specie_name);
     }
 
     protected void runToPosition(final Position goal) {
@@ -44,7 +44,7 @@ public abstract class AnimalMovement extends AnimalNeeds {
             next_pos = calcNextStep(angle + angleDiff, speed);
 
             // 1. check if position collides
-            isColliding = simulation.checkIfCollides(next_pos, 2, this);
+            isColliding = Simulation.checkIfCollides(next_pos, 2, this);
 
             if (!isColliding) break;
         }

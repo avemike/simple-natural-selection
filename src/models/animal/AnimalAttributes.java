@@ -1,6 +1,5 @@
 package models.animal;
 
-import Simulation.Simulation;
 import models.GraphicalRepresentative;
 
 /**
@@ -8,17 +7,17 @@ import models.GraphicalRepresentative;
  */
 public abstract class AnimalAttributes extends GraphicalRepresentative {
     protected boolean sex;
-    protected boolean is_herbivore;
-    protected boolean is_meat_eater;
+    protected boolean is_herbivore = false;
+    protected boolean is_meat_eater = false;
     protected double power;
     protected double size;
     protected double speed;
     protected double sight_range;
     protected double interaction_range;
 
-    public AnimalAttributes(final Simulation simulation, final double x, final double y,
-                            final double size, final String path, final String specie_name) {
-        super(simulation, x, y, (int) size, path, specie_name);
+    public AnimalAttributes(final double x, final double y, final double size,
+                            final String path, final String specie_name) {
+        super(x, y, (int) size, path, specie_name);
         this.size = size;
 
         power = size;

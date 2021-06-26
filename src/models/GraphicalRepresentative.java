@@ -1,6 +1,5 @@
 package models;
 
-import Simulation.Simulation;
 import interfaces.Paintable;
 
 import javax.imageio.ImageIO;
@@ -13,9 +12,9 @@ public abstract class GraphicalRepresentative extends Representative implements 
     protected static String path_to_image;
     protected BufferedImage representative_image;
 
-    public GraphicalRepresentative(final Simulation simulation, final double x, final double y,
+    public GraphicalRepresentative(final double x, final double y,
                                    final int size, final String path, final String specie_name) {
-        super(simulation, x, y, size, size, specie_name);
+        super(x, y, size, size, specie_name);
 
         path_to_image = path;
     }

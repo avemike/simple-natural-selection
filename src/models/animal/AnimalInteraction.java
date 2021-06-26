@@ -1,16 +1,16 @@
 package models.animal;
 
-import Simulation.Simulation;
 import models.Animal;
 import models.Plant;
 import org.jetbrains.annotations.NotNull;
+import simulation.Simulation;
 import utils.Needs;
 import utils.Position;
 
 
 public abstract class AnimalInteraction extends AnimalMovement {
-    public AnimalInteraction(final Simulation simulation, final double x, final double y, final double size, final String path, final String specie_name) {
-        super(simulation, x, y, (int) size, path, specie_name);
+    public AnimalInteraction(final double x, final double y, final double size, final String path, final String specie_name) {
+        super(x, y, (int) size, path, specie_name);
     }
 
     /**
@@ -32,7 +32,7 @@ public abstract class AnimalInteraction extends AnimalMovement {
         }
 
         // 2. check if predator is in sight
-        final Position nearby_predator = simulation.findNearbyPredator(coords, power, sight_range);
+        final Position nearby_predator = Simulation.findNearbyPredator(coords, power, sight_range);
 
         // 2.1 OPTIONAL: run away
         if (nearby_predator != null) {
@@ -69,12 +69,12 @@ public abstract class AnimalInteraction extends AnimalMovement {
     }
 
     protected void eatPlant(final @NotNull Plant plant) {
-        hunger += plant.getKcal();
+        fillHunger(plant.getKcal());
         plant.death();
     }
 
     protected void eatAnimal(final @NotNull Animal animal) {
-        hunger += animal.kcal / 3;
+        fillHunger(animal.getUsableKcal());
         animal.death();
     }
 
@@ -82,7 +82,7 @@ public abstract class AnimalInteraction extends AnimalMovement {
         switch (goal) {
             case HUNGER -> {
                 if (is_herbivore) {
-                    var goals = simulation.searchForPlants(coords, interaction_range);
+                    var goals = Simulation.searchForPlants(coords, interaction_range);
                     goals.removeIf(plant -> !plant.isEdible);
 
                     var closest_plant = getClosestPlant(goals);
@@ -93,7 +93,7 @@ public abstract class AnimalInteraction extends AnimalMovement {
                     return closest_plant != null;
                 }
                 if (is_meat_eater) {
-                    var goals = simulation.searchForAnimals(coords, interaction_range);
+                    var goals = Simulation.searchForAnimals(coords, interaction_range);
                     goals.removeIf(animal -> animal.power >= power);
 
                     var closest_animal = getClosestAnimal(goals);
@@ -110,7 +110,7 @@ public abstract class AnimalInteraction extends AnimalMovement {
                 return true;
             }
             case REPRODUCTION -> {
-                final var animals = simulation.searchForAnimals(coords, interaction_range);
+                final var animals = Simulation.searchForAnimals(coords, interaction_range);
                 animals.removeIf(animal -> animal.sex == sex || !animal.specie_name.equals(specie_name));
 
                 var closest_animal = getClosestAnimal(animals);

@@ -1,4 +1,4 @@
-package Simulation;
+package simulation;
 
 public class Simulation extends Game {
     private Simulation() {
@@ -8,8 +8,8 @@ public class Simulation extends Game {
     public static void start() {
         final var simulation = new Simulation();
 
-        simulation.initializeAnimals(simulation);
-        simulation.initializePlants(simulation);
+        simulation.initializeAnimals();
+        simulation.initializePlants();
 
         simulation.initializeEventLoop();
     }

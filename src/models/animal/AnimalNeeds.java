@@ -1,9 +1,9 @@
 package models.animal;
 
-import Simulation.Simulation;
 import models.Animal;
 import models.Plant;
 import services.Config;
+import simulation.Simulation;
 import utils.Needs;
 import utils.Position;
 
@@ -25,9 +25,9 @@ public abstract class AnimalNeeds extends AnimalAttributes {
     protected double hunger_danger = Double.parseDouble(Config.get("animals_danger_hunger"));
     protected double thirst_danger = Double.parseDouble(Config.get("animals_danger_thirst"));
 
-    public AnimalNeeds(final Simulation simulation, final double x, final double y,
-                       final double size, final String path, final String specie_name) {
-        super(simulation, x, y, (int) size, path, specie_name);
+    public AnimalNeeds(final double x, final double y, final double size,
+                       final String path, final String specie_name) {
+        super(x, y, (int) size, path, specie_name);
 
         kcal = Double.parseDouble(Config.get(specie_name + "_init_kcal"));
         usable_kcal = Double.parseDouble(Config.get(specie_name + "_init_usable_kcal"));
@@ -37,7 +37,7 @@ public abstract class AnimalNeeds extends AnimalAttributes {
         return thirst >= Double.parseDouble(Config.get("animals_stable_thirst")) && hunger >= Double.parseDouble(Config.get("animals_stable_hunger"));
     }
 
-    protected void death() {
+    public void death() {
         is_dead = true;
     }
 
@@ -46,21 +46,21 @@ public abstract class AnimalNeeds extends AnimalAttributes {
     // - - - - - - - - - //
 
     protected Plant searchForPlant(final double range) {
-        var goals = simulation.searchForPlants(coords, range);
+        var goals = Simulation.searchForPlants(coords, range);
         goals.removeIf(plant -> !plant.isEdible);
 
         return getClosestPlant(goals);
     }
 
     protected Animal searchForAnimalVictim(final double range) {
-        var goals = simulation.searchForAnimals(coords, range);
+        var goals = Simulation.searchForAnimals(coords, range);
         goals.removeIf(animal -> animal.power >= power);
 
         return getClosestAnimal(goals);
     }
 
     protected Animal searchForAnimalReproduce(final double range) {
-        final var animals = simulation.searchForAnimals(coords, range);
+        final var animals = Simulation.searchForAnimals(coords, range);
         animals.removeIf(animal -> animal.sex == sex || !animal.specie_name.equals(specie_name));
 
         return getClosestAnimal(animals);
@@ -164,6 +164,7 @@ public abstract class AnimalNeeds extends AnimalAttributes {
         final double percentage_filled = (kcal * 100) / this.kcal;
 
         hunger += percentage_filled;
+        if (hunger >= 100) hunger = 100;
     }
 
     public boolean shouldDie() {

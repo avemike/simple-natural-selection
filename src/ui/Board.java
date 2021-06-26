@@ -1,7 +1,7 @@
 package ui;
 
+import services.InstancesContainer;
 import terrain.Terrain;
-import utils.InstancesContainer;
 
 import javax.swing.*;
 import java.awt.*;

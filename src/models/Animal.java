@@ -1,6 +1,5 @@
 package models;
 
-import Simulation.Simulation;
 import models.animal.AnimalInteraction;
 
 /**
@@ -8,7 +7,7 @@ import models.animal.AnimalInteraction;
  * AnimalAttributes -> AnimalNeeds -> AnimalMovement -> AnimalInteraction -> Animal
  */
 public abstract class Animal extends AnimalInteraction {
-    public Animal(final Simulation simulation, final double x, final double y, final double size, final String path, final String specie_name) {
-        super(simulation, x, y, (int) size, path, specie_name);
+    public Animal(final double x, final double y, final double size, final String path, final String specie_name) {
+        super(x, y, (int) size, path, specie_name);
     }
 }
