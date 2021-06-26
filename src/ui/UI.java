@@ -1,4 +1,4 @@
-package Simulation;
+package ui;
 
 import services.Config;
 import terrain.Terrain;

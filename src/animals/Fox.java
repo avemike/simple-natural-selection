@@ -5,6 +5,7 @@ import interfaces.Edible;
 import interfaces.MeatEater;
 import models.Animal;
 import services.Config;
+import utils.InstancesContainer;
 import utils.Position;
 import utils.Reproduction;
 
@@ -67,6 +68,6 @@ public class Fox extends Animal implements Edible, MeatEater {
             isColliding = simulation.checkIfCollides(next_pos, new_size + 4, child);
         }
 
-        simulation.addAnimal(child);
+        InstancesContainer.addAnimal(child);
     }
 }

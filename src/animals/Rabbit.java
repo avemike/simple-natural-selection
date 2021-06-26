@@ -5,6 +5,7 @@ import interfaces.Edible;
 import interfaces.Herbivore;
 import models.Animal;
 import services.Config;
+import utils.InstancesContainer;
 import utils.Position;
 import utils.Reproduction;
 
@@ -65,7 +66,7 @@ public class Rabbit extends Animal implements Edible, Herbivore {
             isColliding = simulation.checkIfCollides(next_pos, new_size * 4, child);
         }
 
-        simulation.addAnimal(child);
+        InstancesContainer.addAnimal(child);
     }
 
 }

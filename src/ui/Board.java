@@ -1,6 +1,7 @@
-package Simulation;
+package ui;
 
 import terrain.Terrain;
+import utils.InstancesContainer;
 
 import javax.swing.*;
 import java.awt.*;

@@ -11,12 +11,13 @@ import utils.Position;
 /**
  * @apiNote 100 hunger means fulfilled, 0 hunger is starvation
  * @apiNote `Power` and `Drain rates` are calculated based on size
+ * @apiNote hunger is filled by dividing ate usable eaten instance kcal by overall kcal
  */
 public abstract class AnimalNeeds extends AnimalAttributes {
     protected final double usable_kcal;
     public boolean is_dead = false;
     protected double kcal;
-    // Needs (expressed as a percentage - default is 90%)
+    // Needs expressed as percentage
     protected double hunger = Double.parseDouble(Config.get("animals_initial_hunger"));
     protected double thirst = Double.parseDouble(Config.get("animals_initial_thirst"));
     protected double reproduction = Double.parseDouble(Config.get("animals_initial_reproduction"));
