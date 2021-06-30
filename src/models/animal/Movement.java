@@ -1,5 +1,6 @@
 package models.animal;
 
+import models.Animal;
 import simulation.Simulation;
 import utils.Position;
 
@@ -13,13 +14,20 @@ import static utils.Position.getAngle;
  * directions.
  * This direction is calculated once per `temporary_random_counter_base` turns
  */
-public abstract class AnimalMovement extends AnimalNeeds {
+public class Movement {
+    final Attributes attribs;
+    final Interaction interaction;
+    final Needs needs;
+    final Animal animal;
     protected double temporary_random_direction = 0;
     protected int temporary_random_counter = 0;
     protected int temporary_random_counter_base = 10;
 
-    public AnimalMovement(final double x, final double y, final double size, final String path, final String specie_name) {
-        super(x, y, (int) size, path, specie_name);
+    public Movement(final Animal animal, final Attributes attribs, final Needs needs, final Interaction interaction) {
+        this.attribs = attribs;
+        this.interaction = interaction;
+        this.animal = animal;
+        this.needs = needs;
     }
 
     protected void runToPosition(final Position goal) {
@@ -31,38 +39,38 @@ public abstract class AnimalMovement extends AnimalNeeds {
     }
 
     private void runTo(final Position goal, double angle) {
-        if (goal != null) angle = getAngle(coords, goal);
+        if (goal != null) angle = getAngle(animal.getPosition(), goal);
         final var angleDiffs = new int[]
                 {0, 7, -7, 15, -15, 22, -22, 30, -30, 38, 45, -45, 60, -60,
                         90, -90, 160, -160, 180};
 
-        Position next_pos = coords;
+        Position next_pos = animal.getPosition();
         boolean isColliding = false;
 
         // 0. check from which angle it does not collide with anything
         for (var angleDiff : angleDiffs) {
-            next_pos = calcNextStep(angle + angleDiff, speed);
+            next_pos = animal.calcNextStep(angle + angleDiff, attribs.speed);
 
             // 1. check if position collides
-            isColliding = Simulation.checkIfCollides(next_pos, 2, this);
+            isColliding = Simulation.checkIfCollides(next_pos, 2, animal);
 
             if (!isColliding) break;
         }
         // 2. if everywhere were collision, get stuck
         if (isColliding) {
-            Simulation.log.log(Level.WARNING, "(" + coords.x + " " + coords.y + ") - Stuck [" + specie_name + "]");
+            Simulation.log.log(Level.WARNING, "(" + animal.getPosition().x + " " + animal.getPosition().y + ") - Stuck [" + attribs.specie_name + "]");
             return;
         }
 
         // 3. move to position
-        coords = next_pos;
+        animal.setCoords(next_pos);
     }
 
-    private void clearRandomDirection() {
+    void clearRandomDirection() {
         temporary_random_counter = 0;
     }
 
-    private void setRandomDirection() {
+    void setRandomDirection() {
         temporary_random_counter = temporary_random_counter_base;
         temporary_random_direction = Math.random() * 360;
     }

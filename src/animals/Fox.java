@@ -18,13 +18,13 @@ public class Fox extends Animal implements Edible {
 
         final double specie_ratio = size / Double.parseDouble(Config.get("fox_init_size"));
 
-        speed = specie_ratio * Double.parseDouble(Config.get("fox_init_speed"));
-        kcal *= specie_ratio;
-        interaction_range = 1.5 * size;
-        sight_range = 1.25 * specie_ratio * Double.parseDouble(Config.get("fox_init_sight_range"));
-        sex = Math.random() * 2 > 1;
-        specie_name = "fox";
-        is_meat_eater = true;
+        attribs.speed = specie_ratio * Double.parseDouble(Config.get("fox_init_speed"));
+        needs.kcal *= specie_ratio;
+        attribs.interaction_range = 1.5 * size;
+        attribs.sight_range = 1.25 * specie_ratio * Double.parseDouble(Config.get("fox_init_sight_range"));
+        attribs.sex = Math.random() * 2 > 1;
+        attribs.specie_name = "fox";
+        attribs.is_meat_eater = true;
     }
 
     public static Fox create(final double x, final double y, final double size) {
@@ -43,14 +43,9 @@ public class Fox extends Animal implements Edible {
         }
     }
 
-    @Override
-    public void reproductionDrain() {
-        reproduction -= 0.2;
-    }
-
-    protected void reproduce(Animal animal) throws Exception {
-        fillReproduction();
-        animal.fillReproduction();
+    public void reproduce(Animal animal) throws Exception {
+        needs.fillReproduction();
+        animal.needs.fillReproduction();
 
         double new_size = Reproduction.newSize(this, animal);
 

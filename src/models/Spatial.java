@@ -40,7 +40,7 @@ public abstract class Spatial {
         return coords;
     }
 
-    protected Animal getClosestAnimal(final Vector<Animal> objs) {
+    public Animal getClosestAnimal(final Vector<Animal> objs) {
         if (objs.size() == 0) return null;
 
         int which_one = 0;
@@ -57,7 +57,7 @@ public abstract class Spatial {
         return objs.get(which_one);
     }
 
-    protected Plant getClosestPlant(final Vector<Plant> objs) {
+    public Plant getClosestPlant(final Vector<Plant> objs) {
         if (objs.size() == 0) return null;
 
         int which_one = 0;

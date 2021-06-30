@@ -17,12 +17,12 @@ public class Rabbit extends Animal {
 
         final double specie_ratio = size / Double.parseDouble(Config.get("rabbit_init_size"));
 
-        speed = specie_ratio * Double.parseDouble(Config.get("rabbit_init_speed"));
-        sight_range = 1.2 * specie_ratio * Double.parseDouble(Config.get("rabbit_init_sight_range"));
-        interaction_range = 1.5 * size;
-        sex = Math.random() * 2 > 1;
-        specie_name = "rabbit";
-        is_herbivore = true;
+        attribs.speed = specie_ratio * Double.parseDouble(Config.get("rabbit_init_speed"));
+        attribs.sight_range = 1.2 * specie_ratio * Double.parseDouble(Config.get("rabbit_init_sight_range"));
+        attribs.interaction_range = 1.5 * size;
+        attribs.sex = Math.random() * 2 > 1;
+        attribs.specie_name = "rabbit";
+        attribs.is_herbivore = true;
     }
 
     public static Rabbit create(final double x, final double y, final double size) {
@@ -41,14 +41,9 @@ public class Rabbit extends Animal {
         }
     }
 
-    @Override
-    public void reproductionDrain() {
-        reproduction -= 2;
-    }
-
-    protected void reproduce(Animal animal) throws Exception {
-        fillReproduction();
-        animal.fillReproduction();
+    public void reproduce(Animal animal) {
+        needs.fillReproduction();
+        animal.needs.fillReproduction();
 
         double new_size = Reproduction.newSize(this, animal);
 
@@ -65,7 +60,7 @@ public class Rabbit extends Animal {
                 angle = 0;
                 range += 2;
 
-                if (range > 5 * size) return;
+                if (range > 5 * attribs.size) return;
             }
             next_pos = child.calcNextStep(angle += 30, range);
 
