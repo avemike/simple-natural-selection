@@ -10,10 +10,10 @@ import models.animal.Needs;
  * AnimalAttributes -> AnimalNeeds -> AnimalMovement -> AnimalInteraction -> Animal
  */
 public abstract class Animal extends GraphicalRepresentative {
-    public final Attributes attribs;
-    public Interaction interaction = null;
-    public Movement movement = null;
-    public Needs needs = null;
+    protected final Attributes attribs;
+    protected Interaction interaction = null;
+    protected Movement movement = null;
+    protected Needs needs = null;
 
     public Animal(final double x, final double y, final double size, final String path, final String specie_name) {
         super(x, y, (int) size, path, specie_name);
@@ -26,4 +26,48 @@ public abstract class Animal extends GraphicalRepresentative {
     }
 
     public abstract void reproduce(final Animal animal) throws Exception;
+
+    // = = = = = = //
+    //   Public    //
+    // = = = = = = //
+    public void death() {
+        needs.death();
+    }
+
+    public void act() throws Exception {
+        interaction.act();
+    }
+
+    public void fillReproduction() {
+        needs.fillReproduction();
+    }
+    // = = = = = = //
+    //   Getters   //
+    // = = = = = = //
+
+    public double getPower() {
+        return attribs.power;
+    }
+
+    public double getSize() {
+        return attribs.size;
+    }
+
+    public double getUsableKcal() {
+        return needs.getUsableKcal();
+    }
+
+    public boolean getSex() {
+        return attribs.sex;
+    }
+
+    public String getSpecieName() {
+        return attribs.specie_name;
+    }
+
+    public boolean isDead() {
+        return needs.is_dead;
+    }
+
+
 }

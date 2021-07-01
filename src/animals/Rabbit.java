@@ -42,8 +42,8 @@ public class Rabbit extends Animal {
     }
 
     public void reproduce(Animal animal) {
-        needs.fillReproduction();
-        animal.needs.fillReproduction();
+        fillReproduction();
+        animal.fillReproduction();
 
         double new_size = Reproduction.newSize(this, animal);
 

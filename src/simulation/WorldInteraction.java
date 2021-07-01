@@ -34,7 +34,7 @@ public class WorldInteraction {
     public static Position findNearbyPredator(final Position animal_pos, final double power, final double range) {
         for (var animal : InstancesContainer.animals) {
             // 0. check whether it is a threat
-            if (animal.attribs.getPower() <= power) continue;
+            if (animal.getPower() <= power) continue;
 
             // 1. check if it is within given range
             if (!Position.isInRange(animal_pos, animal.getPosition(), range)) continue;
@@ -69,13 +69,13 @@ public class WorldInteraction {
         // 0. check collisions with instances
         for (var animal : InstancesContainer.animals) {
             if (animal == original) continue;
-            boolean isColliding = isInRange(pos, animal.getPosition(), 2 + animal.attribs.getSize() + range);
+            boolean isColliding = isInRange(pos, animal.getPosition(), 2 + animal.getSize() + range);
 
             if (isColliding) return true;
         }
         for (var animal : InstancesContainer.animals_buffer) {
             if (animal == original) continue;
-            boolean isColliding = isInRange(pos, animal.getPosition(), 2 + animal.attribs.getSize() + range);
+            boolean isColliding = isInRange(pos, animal.getPosition(), 2 + animal.getSize() + range);
 
             if (isColliding) return true;
         }

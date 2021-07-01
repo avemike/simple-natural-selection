@@ -80,8 +80,8 @@ public class Interaction {
     }
 
     protected void eatAnimal(final Animal animal) {
-        needs.fillHunger(animal.needs.getUsableKcal());
-        animal.needs.death();
+        needs.fillHunger(animal.getUsableKcal());
+        animal.death();
     }
 
     protected boolean searchForGoalAndInteract(Needs goal) throws Exception {
@@ -102,7 +102,7 @@ public class Interaction {
                 }
                 if (attribs.is_meat_eater) {
                     var goals = Simulation.searchForAnimals(animal.getPosition(), attribs.interaction_range);
-                    goals.removeIf(animal -> animal.attribs.power >= attribs.power);
+                    goals.removeIf(animal -> animal.getPower() >= attribs.power);
 
                     var closest_animal = animal.getClosestAnimal(goals);
 
@@ -119,7 +119,7 @@ public class Interaction {
             }
             case REPRODUCTION -> {
                 final var animals = Simulation.searchForAnimals(animal.getPosition(), attribs.interaction_range);
-                animals.removeIf(animal -> animal.attribs.sex == attribs.sex || !animal.attribs.specie_name.equals(attribs.specie_name));
+                animals.removeIf(animal -> animal.getSex() == attribs.sex || !animal.getSpecieName().equals(attribs.specie_name));
 
                 var closest_animal = animal.getClosestAnimal(animals);
 

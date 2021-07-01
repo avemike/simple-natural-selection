@@ -61,14 +61,14 @@ public class Needs {
 
     protected Animal searchForAnimalVictim(final double range) {
         var goals = Simulation.searchForAnimals(animal.getPosition(), range);
-        goals.removeIf(animal -> animal.attribs.power >= attribs.power);
+        goals.removeIf(animal -> animal.getPower() >= attribs.power);
 
         return animal.getClosestAnimal(goals);
     }
 
     protected Animal searchForAnimalReproduce(final double range) {
         final var animals = Simulation.searchForAnimals(animal.getPosition(), range);
-        animals.removeIf(animal -> animal.attribs.sex == attribs.sex || !animal.attribs.specie_name.equals(attribs.specie_name));
+        animals.removeIf(animal -> animal.getSex() == attribs.sex || !animal.getSpecieName().equals(attribs.specie_name));
 
         return animal.getClosestAnimal(animals);
     }

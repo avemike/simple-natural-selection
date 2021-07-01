@@ -44,8 +44,8 @@ public class Fox extends Animal implements Edible {
     }
 
     public void reproduce(Animal animal) throws Exception {
-        needs.fillReproduction();
-        animal.needs.fillReproduction();
+        fillReproduction();
+        animal.fillReproduction();
 
         double new_size = Reproduction.newSize(this, animal);
 
