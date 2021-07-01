@@ -29,21 +29,17 @@ public class WorldInteraction {
     /**
      * @apiNote if there isn't nearby predator within range, return null
      * @apiNote algorithm returns first animal that fullfills the condition
-     * @todo search for the nearest predator
      */
-    public static Position findNearbyPredator(final Position animal_pos, final double power, final double range) {
-        for (var animal : InstancesContainer.animals) {
-            // 0. check whether it is a threat
-            if (animal.getPower() <= power) continue;
+    public static Position findNearbyPredator(final Spatial animal, final double power, final double range) {
+        var nearby_predators = new Vector<Animal>(Simulation.animals);
 
-            // 1. check if it is within given range
-            if (!Position.isInRange(animal_pos, animal.getPosition(), range)) continue;
+        // check if is weaker (has less power) and in range
+        nearby_predators.removeIf(predator -> predator.getPower() <= power
+                || !Position.isInRange(animal.getPosition(), predator.getPosition(), range));
 
-            // 2. return position
-            return animal.getPosition();
-        }
-        // OPTIONAL: 3. otherwise return null
-        return null;
+        if (nearby_predators.isEmpty()) return null;
+
+        return animal.getClosestAnimal(nearby_predators).getPosition();
     }
 
     public static Vector<Animal> searchForAnimals(final Position src, final double range) {
