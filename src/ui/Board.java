@@ -1,6 +1,6 @@
 package ui;
 
-import services.InstancesContainer;
+import simulation.Simulation;
 import terrain.Terrain;
 
 import javax.swing.*;
@@ -24,13 +24,13 @@ public class Board extends JPanel {
             terrain.paintComponent(g2D);
 
             // 1. Draw all animals
-            for (var animal : InstancesContainer.animals) {
+            for (var animal : Simulation.animals) {
                 if (animal != null)
                     animal.paintComponent(g2D);
             }
 
             // 2. Draw all plants
-            for (var plant : InstancesContainer.plants) {
+            for (var plant : Simulation.plants) {
                 if (plant != null)
                     plant.paintComponent(g2D);
             }

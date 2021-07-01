@@ -4,8 +4,6 @@ import models.Animal;
 import simulation.Simulation;
 import utils.Position;
 
-import java.util.logging.Level;
-
 import static utils.Position.getAngle;
 
 /**
@@ -58,7 +56,6 @@ public class Movement {
         }
         // 2. if everywhere were collision, get stuck
         if (isColliding) {
-            Simulation.log.log(Level.WARNING, "(" + animal.getPosition().x + " " + animal.getPosition().y + ") - Stuck [" + attribs.specie_name + "]");
             return;
         }
 

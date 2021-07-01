@@ -6,6 +6,8 @@ import simulation.Simulation;
 import utils.Needs;
 import utils.Position;
 
+import java.util.logging.Level;
+
 
 public class Interaction {
     final Attributes attribs;
@@ -38,7 +40,7 @@ public class Interaction {
         }
 
         // 2. check if predator is in sight
-        final Position nearby_predator = Simulation.findNearbyPredator(animal.getPosition(), attribs.power, attribs.sight_range);
+        final Position nearby_predator = Simulation.findNearbyPredator(animal, attribs.power, attribs.sight_range);
 
         // 2.1 OPTIONAL: run away
         if (nearby_predator != null) {
@@ -80,6 +82,7 @@ public class Interaction {
     }
 
     protected void eatAnimal(final Animal animal) {
+        Simulation.log.log(Level.INFO, "(" + attribs.specie_name + ") ate (" + animal.getSpecieName() + ")");
         needs.fillHunger(animal.getUsableKcal());
         animal.death();
     }

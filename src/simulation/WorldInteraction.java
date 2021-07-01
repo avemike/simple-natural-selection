@@ -5,8 +5,8 @@ import animals.Rabbit;
 import models.Animal;
 import models.Plant;
 import models.Representative;
+import models.Spatial;
 import services.Config;
-import services.InstancesContainer;
 import utils.Position;
 
 import java.util.Vector;
@@ -17,7 +17,7 @@ public class WorldInteraction {
     public static Vector<Plant> searchForPlants(final Position src, final double range) {
         var found_plants = new Vector<Plant>();
 
-        for (var plant : InstancesContainer.plants) {
+        for (var plant : Simulation.plants) {
             boolean isInRange = isInRange(src, plant.getPosition(), range);
 
             if (isInRange) found_plants.add(plant);
@@ -45,7 +45,7 @@ public class WorldInteraction {
     public static Vector<Animal> searchForAnimals(final Position src, final double range) {
         var found_animals = new Vector<Animal>();
 
-        for (var animal : InstancesContainer.animals) {
+        for (var animal : Simulation.animals) {
             boolean isInRange = isInRange(src, animal.getPosition(), range);
 
             if (isInRange && animal.getPosition() != src) found_animals.add(animal);
@@ -61,27 +61,28 @@ public class WorldInteraction {
     // @todo:
     //  public Vector<Animal> searchForVegetation(final Position src, final double range) {
     //  }
+
     public static boolean checkIfCollides(final Position pos, final double range, final Representative original) {
         // 0. check collisions with instances
-        for (var animal : InstancesContainer.animals) {
+        for (var animal : Simulation.animals) {
             if (animal == original) continue;
             boolean isColliding = isInRange(pos, animal.getPosition(), 2 + animal.getSize() + range);
 
             if (isColliding) return true;
         }
-        for (var animal : InstancesContainer.animals_buffer) {
+        for (var animal : Simulation.animals_buffer) {
             if (animal == original) continue;
             boolean isColliding = isInRange(pos, animal.getPosition(), 2 + animal.getSize() + range);
 
             if (isColliding) return true;
         }
-        for (var plant : InstancesContainer.plants) {
+        for (var plant : Simulation.plants) {
             if (plant == original) continue;
             boolean isColliding = isInRange(pos, plant.getPosition(), 2 + plant.getSize() + range);
 
             if (isColliding) return true;
         }
-        for (var plant : InstancesContainer.plants_buffer) {
+        for (var plant : Simulation.plants_buffer) {
             if (plant == original) continue;
             boolean isColliding = isInRange(pos, plant.getPosition(), 2 + plant.getSize() + range);
 
@@ -90,11 +91,11 @@ public class WorldInteraction {
 
         // 1. check collision with borders
         if (pos.x < 16 || pos.y < 16) return true;
-        if (pos.x > InstancesContainer.terrain.getWidth() - 16 || pos.y > InstancesContainer.terrain.getHeight() - 16)
+        if (pos.x > Simulation.terrain.getWidth() - 16 || pos.y > Simulation.terrain.getHeight() - 16)
             return true;
 
         // 2. check collision with water
-        if (InstancesContainer.terrain.isCollidingWithWater(pos, range)) return true;
+        if (Simulation.terrain.isCollidingWithWater(pos, range)) return true;
 
         // 3. otherwise return false
         return false;
@@ -105,8 +106,8 @@ public class WorldInteraction {
         Position random_position;
         int max_counter = 40;
         do {
-            random_position = new Position(Math.random() * InstancesContainer.terrain.getWidth(),
-                    Math.random() * InstancesContainer.terrain.getHeight());
+            random_position = new Position(Math.random() * Simulation.terrain.getWidth(),
+                    Math.random() * Simulation.terrain.getHeight());
         } while (checkIfCollides(random_position, size, null) && max_counter-- > 0);
 
         return random_position;
@@ -120,7 +121,7 @@ public class WorldInteraction {
 
             var random_position = generateNonCollidingPos(size);
 
-            InstancesContainer.animals.add(Fox.create(random_position.x, random_position.y, size));
+            Simulation.animals.add(Fox.create(random_position.x, random_position.y, size));
         }
         // 2. Add rabbits
         for (int x = 0, max = Integer.parseInt(Config.get("animals_rabbits_number")); x < max; x++) {
@@ -129,7 +130,7 @@ public class WorldInteraction {
 
             var random_position = generateNonCollidingPos(size);
 
-            InstancesContainer.animals.add(Rabbit.create(random_position.x, random_position.y, size));
+            Simulation.animals.add(Rabbit.create(random_position.x, random_position.y, size));
         }
     }
 }

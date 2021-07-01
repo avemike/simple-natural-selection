@@ -2,7 +2,6 @@ package animals;
 
 import models.Animal;
 import services.Config;
-import services.InstancesContainer;
 import simulation.Simulation;
 import utils.Position;
 import utils.Reproduction;
@@ -15,7 +14,8 @@ public class Rabbit extends Animal {
     protected Rabbit(final double x, final double y, final double size) {
         super(x, y, Integer.parseInt(Config.get("rabbit_init_size")), Config.assets_path + "/" + "rabbit.png", "rabbit");
 
-        final double specie_ratio = size / Double.parseDouble(Config.get("rabbit_init_size"));
+        attribs.specie_size = Double.parseDouble(Config.get("rabbit_init_size"));
+        final double specie_ratio = size / attribs.specie_size;
 
         attribs.speed = specie_ratio * Double.parseDouble(Config.get("rabbit_init_speed"));
         attribs.sight_range = 1.2 * specie_ratio * Double.parseDouble(Config.get("rabbit_init_sight_range"));
@@ -68,6 +68,6 @@ public class Rabbit extends Animal {
         }
 
         child.setCoords(next_pos);
-        InstancesContainer.addAnimal(child);
+        Simulation.addAnimal(child);
     }
 }

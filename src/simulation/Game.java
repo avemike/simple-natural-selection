@@ -5,7 +5,6 @@ import animals.Rabbit;
 import plants.Shrub;
 import plants.Tree;
 import services.Config;
-import services.InstancesContainer;
 import ui.UI;
 
 import javax.swing.*;
@@ -21,7 +20,7 @@ public class Game extends WorldInteraction implements ActionListener {
     private int event_loop_condition = 100000;
 
     protected Game() {
-        ui = new UI(InstancesContainer.terrain);
+        ui = new UI(Simulation.terrain);
 
         javax.swing.SwingUtilities.invokeLater(ui);
     }
@@ -38,28 +37,28 @@ public class Game extends WorldInteraction implements ActionListener {
         if (hasLoopEnded()) return;
 
         // 1. run animals
-        for (var animal : InstancesContainer.animals) {
+        for (var animal : Simulation.animals) {
             if (animal != null)
                 animal.act();
         }
         // 2. "garbage collector"
-        InstancesContainer.animals.removeIf(animal -> animal.isDead());
-        InstancesContainer.plants.removeIf(plant -> plant.is_dead);
+        Simulation.animals.removeIf(animal -> animal.isDead());
+        Simulation.plants.removeIf(plant -> plant.is_dead);
 
         // 3. create missing edible plants
-        final var current_edible_plants_num = InstancesContainer.plants.stream()
+        final var current_edible_plants_num = Simulation.plants.stream()
                 .filter(plant -> plant.is_edible)
                 .count();
 
         initializeMissingEdiblePlants((int) (edible_plants_num - current_edible_plants_num));
 
         // 4. add instances from buffers (newly created)
-        InstancesContainer.animals.addAll(InstancesContainer.animals_buffer);
-        InstancesContainer.plants.addAll(InstancesContainer.plants_buffer);
+        Simulation.animals.addAll(Simulation.animals_buffer);
+        Simulation.plants.addAll(Simulation.plants_buffer);
 
         // 5. clean buffers
-        InstancesContainer.animals_buffer.clear();
-        InstancesContainer.plants_buffer.clear();
+        Simulation.animals_buffer.clear();
+        Simulation.plants_buffer.clear();
 
 
         // 6. paint
@@ -83,7 +82,7 @@ public class Game extends WorldInteraction implements ActionListener {
 
             var random_position = generateNonCollidingPos(size);
 
-            InstancesContainer.animals.add(Fox.create(random_position.x, random_position.y, size));
+            Simulation.animals.add(Fox.create(random_position.x, random_position.y, size));
         }
         // 2. Add rabbits
         for (int x = 0, max = Integer.parseInt(Config.get("animals_rabbits_number")); x < max; x++) {
@@ -92,7 +91,7 @@ public class Game extends WorldInteraction implements ActionListener {
 
             var random_position = generateNonCollidingPos(size);
 
-            InstancesContainer.animals.add(Rabbit.create(random_position.x, random_position.y, size));
+            Simulation.animals.add(Rabbit.create(random_position.x, random_position.y, size));
         }
     }
 
@@ -101,13 +100,13 @@ public class Game extends WorldInteraction implements ActionListener {
         for (int x = 0, max = Integer.parseInt(Config.get("plants_trees_number")); x < max; x++) {
             var random_position = generateNonCollidingPos(0);
 
-            InstancesContainer.plants.add(Tree.create(random_position.x, random_position.y));
+            Simulation.plants.add(Tree.create(random_position.x, random_position.y));
         }
         // 2. Add shrubs
         for (int x = 0; x < Integer.parseInt(Config.get("plants_shrubs_number")); x++) {
             var random_position = generateNonCollidingPos(0);
 
-            InstancesContainer.plants.add(Shrub.create(random_position.x, random_position.y));
+            Simulation.plants.add(Shrub.create(random_position.x, random_position.y));
         }
     }
 
@@ -115,7 +114,7 @@ public class Game extends WorldInteraction implements ActionListener {
         for (int i = 0; i < n; i++) {
             var random_position = generateNonCollidingPos(0);
 
-            InstancesContainer.addPlant(Shrub.create(random_position.x, random_position.y));
+            Simulation.addPlant(Shrub.create(random_position.x, random_position.y));
         }
     }
 

@@ -3,7 +3,6 @@ package animals;
 import interfaces.Edible;
 import models.Animal;
 import services.Config;
-import services.InstancesContainer;
 import simulation.Simulation;
 import utils.Position;
 import utils.Reproduction;
@@ -16,7 +15,8 @@ public class Fox extends Animal implements Edible {
     protected Fox(final double x, final double y, final double size) {
         super(x, y, size, Config.assets_path + "/" + "fox.png", "fox");
 
-        final double specie_ratio = size / Double.parseDouble(Config.get("fox_init_size"));
+        attribs.specie_size = Double.parseDouble(Config.get("fox_init_size"));
+        final double specie_ratio = size / attribs.specie_size;
 
         attribs.speed = specie_ratio * Double.parseDouble(Config.get("fox_init_speed"));
         needs.kcal *= specie_ratio;
@@ -69,6 +69,6 @@ public class Fox extends Animal implements Edible {
         }
 
         child.setCoords(next_pos);
-        InstancesContainer.addAnimal(child);
+        Simulation.addAnimal(child);
     }
 }

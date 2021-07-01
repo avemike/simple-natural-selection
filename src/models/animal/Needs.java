@@ -19,11 +19,14 @@ public class Needs {
     final Movement movement;
     final Animal animal;
     public boolean is_dead = false;
-    public double reproduction = Double.parseDouble(Config.get("animals_initial_reproduction"));
     public double kcal;
     // Needs expressed as percentage
+    protected double reproduction = Double.parseDouble(Config.get("animals_initial_reproduction"));
     protected double hunger = Double.parseDouble(Config.get("animals_initial_hunger"));
     protected double thirst = Double.parseDouble(Config.get("animals_initial_thirst"));
+    protected double reproduction_drain = 0.3;
+    protected double hunger_drain = 0.4;
+    protected double thirst_drain = 0.8;
     // Danger level
     protected double hunger_danger = Double.parseDouble(Config.get("animals_danger_hunger"));
     protected double thirst_danger = Double.parseDouble(Config.get("animals_danger_thirst"));
@@ -149,15 +152,15 @@ public class Needs {
     // = = = = = = = = = = //
 
     public void hungerDrain() {
-        hunger -= 0.1;
+        hunger -= hunger_drain;
     }
 
     public void thirstDrain() {
-        thirst -= 0.2;
+        thirst -= thirst_drain;
     }
 
     public void reproductionDrain() {
-        reproduction -= 1;
+        reproduction -= reproduction_drain;
     }
 
     // = = = = = = = = = = //

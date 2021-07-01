@@ -11,6 +11,7 @@ public class Attributes {
     public boolean is_meat_eater = false;
     public double power;
     public double size;
+    public double specie_size;
     public double speed;
     public double sight_range;
     public double interaction_range;
